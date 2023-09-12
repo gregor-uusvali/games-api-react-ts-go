@@ -4,13 +4,13 @@ import App from './App';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
 import Home from './components/Home';
-import Games from './components/Games';
-import Ganres from './components/Ganres';
-import EditGame from './components/EditGame';
-import ManageCatalogue from './components/ManageCatalogue';
+import Plants from './components/Plants';
+import Family from './components/Family';
+import EditPlant from './components/EditPlant';
+import ManagePlants from './components/ManagePlants';
 import GraphQL from './components/GraphQL';
 import Login from './components/Login';
-import Game from './components/Game';
+import Plant from './components/Plant';
 
 const router = createBrowserRouter([
   {
@@ -20,24 +20,24 @@ const router = createBrowserRouter([
     children: [
       {index: true, element: <Home />},
       {
-        path: "/games",
-        element: <Games />,
+        path: "/plants",
+        element: <Plants />,
       },
       {
-        path: "/games/:id",
-        element: <Game />,
+        path: "/plants/:id",
+        element: <Plant />,
       },
       {
-        path: "/ganres",
-        element: <Ganres />,
+        path: "/family",
+        element: <Family />,
       },
       {
-        path: "/admin/game/0",
-        element: <EditGame />,
+        path: "/admin/plant/0",
+        element: <EditPlant />,
       },
       {
-        path: "/manage-catalogue",
-        element: <ManageCatalogue />,
+        path: "/manage-plants",
+        element: <ManagePlants />,
       },
       {
         path: "/graphql",

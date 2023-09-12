@@ -33,7 +33,7 @@ function App() {
       <div className="container mx-auto">
         <div className="flex justify-between mt-3 mb-3">
           <div className="flex-grow">
-            <h1 className='text-3xl font-bold'>Go play a game 🚀</h1>
+            <h1 className='text-3xl font-bold'>Water a plant 🪴</h1>
           </div>
           <div className="flex text-end items-center">
             {jwtToken === ""
@@ -50,21 +50,21 @@ function App() {
             <nav>
               <div className="border rounded divide-y divide-solid">
                 <Link to="/" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Home</Link>
-                <Link to="/games" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Games</Link>
-                <Link to="/ganres" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Ganres</Link>
+                <Link to="/plants" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Plants</Link>
+                <Link to="/family" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Family</Link>
                 {jwtToken !== "" &&
                   <>
-                    <Link to="/admin/game/0" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Add Game</Link>
-                    <Link to="/manage-catalogue" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Manage Games</Link>
+                    <Link to="/admin/plant/0" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Add Plant</Link>
+                    <Link to="/manage-plants" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Manage Plants</Link>
                     <Link to="/graphql" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">GraphQL</Link>
                   </>
                 }
               </div>
             </nav>
           </div>
-          <div className='w-full'>
+          <div className='w-full mx-4'>
             <Alert type={alertType} message={alertMessage} className={alertClassName} />
-            <div className="w-4/5 flex justify-center">
+            <div className="mx-auto w-4/5 flex justify-center">
               <Outlet />
             </div>
           </div>

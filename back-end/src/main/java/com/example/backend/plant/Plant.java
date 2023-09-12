@@ -1,8 +1,21 @@
 package com.example.backend.plant;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
 
+import java.time.LocalDate;
+@Entity
+@Table
 public class Plant {
+    @Id
+    @SequenceGenerator(
+            name = "plant_sequence",
+            sequenceName = "plant_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "plant_sequence"
+    )
     private Long id;
     private String name;
     private String description;
