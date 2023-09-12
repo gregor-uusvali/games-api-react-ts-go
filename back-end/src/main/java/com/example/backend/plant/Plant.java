@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 @Entity
-@Table
+@Table(name = "plants")
 public class Plant {
     @Id
     @SequenceGenerator(

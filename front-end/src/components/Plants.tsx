@@ -37,29 +37,6 @@ const Plants = () => {
                 <h2 className="text-2xl font-bold">Plants</h2>
                 <hr className="my-4" />
                 <div className="overflow-x-auto">
-                    {/* <table className="min-w-full table-auto border-collapse border border-gray-300">
-                        <thead>
-                            <tr className="bg-gray-200">
-                                <th className="py-2 px-4">Plant</th>
-                                <th className="py-2 px-4">Date</th>
-                                <th className="py-2 px-4">Img</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {plants.map((m) => (
-                                <tr key={m.id} className="hover:bg-gray-100">
-                                    <td className="py-2 px-4">
-                                        <Link to={`/plants/${m.id}`} className="text-blue-500">
-                                            {m.name}
-                                        </Link>
-                                    </td>
-                                    <td className="py-2 px-4">{m.date.toString()}</td>
-                                    <td className="w-28 h-28 py-2 px-4"><img className="mx-auto" src={m.image} alt="plant image" /></td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table> */}
-
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

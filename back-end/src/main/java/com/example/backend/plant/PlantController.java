@@ -21,7 +21,6 @@ public class PlantController {
     }
 
     @GetMapping
-//    @CrossOrigin(origins="http://localhost:3000")
     public List<Plant> getPlants(){
         return plantService.getPlants();
     }

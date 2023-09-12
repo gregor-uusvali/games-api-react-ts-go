@@ -11,6 +11,7 @@ import ManagePlants from './components/ManagePlants';
 import GraphQL from './components/GraphQL';
 import Login from './components/Login';
 import Plant from './components/Plant';
+import Register from './components/Register';
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
       },
     ]
   }

@@ -30,7 +30,7 @@ const Login = () => {
       setAlertType("error")
       setTimeout(() => {
         setAlertClassName("hidden")
-      },4000)
+      }, 4000)
     }
   }
 
@@ -47,27 +47,30 @@ const Login = () => {
               title="Email Address"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               onChange={(event) => setEmail(event.target.value)}
-              autoComplete="email-new" placeholder="" value={email} errorDiv={""} errorMsg={""}              
+              autoComplete="email-new" placeholder="" value={email} errorDiv={""} errorMsg={""}
             />
           </div>
           <div className="mb-6">
-          <Input
+            <Input
               name="password"
               type="password"
               title="Password"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               onChange={(event) => setPassword(event.target.value)}
-              autoComplete="password-new" placeholder={""} value={password} errorDiv={""} errorMsg={""}              
+              autoComplete="password-new" placeholder={""} value={password} errorDiv={""} errorMsg={""}
             />
             {/* <p className="text-red-500 text-xs italic">Please choose a password.</p> */}
           </div>
           <div className="flex items-center justify-center">
-            <input 
+            <input
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
               value="Login"
             />
           </div>
+          <p className="mt-4 text-sm font-light text-black-500 dark:text-black-400">
+            Don’t have an account yet? <a href="/register" className="font-bold text-primary-600 hover:underline dark:text-primary-500">Sign up</a>
+          </p>
         </form>
       </div>
     </div>
