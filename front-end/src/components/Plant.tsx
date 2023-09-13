@@ -6,7 +6,27 @@ const Plant = () => {
     const [plant, setPlant] = useState<PlantType| null>(null)
     let { id } = useParams()
 
+    const fetchPlant = () => {
+      const headers = new Headers()
+      headers.append("Content-Type", "application/json")
+      const requestOptions = {
+        method: "GET",
+        headers: headers
+      }
+      fetch(`http://localhost:8080/api/v1/plant/${id}/`, requestOptions)
+        .then((response) => response.json()
+        .then(data => {
+          console.log(data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+        )
+
+    }
+
     useEffect(() => {
+      fetchPlant()
         let plant = {
             id: 1,
             name: "Schlumbergera",
@@ -19,8 +39,9 @@ const Plant = () => {
     }, [id])
 
     return (
-      <div className="w-full mx-4">
-        <div className="">
+      <div className="w-full flex gap-4">
+        <img className="w-1/5" src={plant?.image} alt="plant image" />
+        <div className="w-4/5">
           <h2 className="text-2xl font-bold">Plant: {plant !== null && plant.name}</h2>
           <small><em>Added on {plant?.date.toString()}</em></small>
           <hr className="my-4" />

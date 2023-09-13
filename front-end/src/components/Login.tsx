@@ -16,21 +16,47 @@ const Login = () => {
 
   const navigate = useNavigate()
 
+  const addInfo = (str: React.SetStateAction<string>, type: React.SetStateAction<string>) => {
+    setAlertClassName("alert-banner")
+    setAlertMessage(str)
+    setAlertType(type)
+    setTimeout(() => {
+      setAlertClassName("hidden")
+    }, 4000)
+  }
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log("email/pass", email, password);
-    if (email === "test@test.com") {
-      setJwtToken("abc");
-      setAlertClassName("hidden")
-      setAlertMessage("")
-      navigate("/")
+    if (email !== "" && password !== "") {
+      let payload = {
+        email,
+        password
+      }
+      const headers = new Headers();
+      headers.append("Content-Type", "application/json")
+      const requestOptions = {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(payload)
+      }
+      fetch("http://localhost:8080/api/v1/login", requestOptions)
+        .then(async (response) => {
+          if (response.ok) {
+            const data = await response.json();
+            setJwtToken("abc")
+            navigate("/");
+          } else {
+            const errorText = await response.text();
+            addInfo(errorText, "error");
+          }
+        })
+
+        .catch(error => {
+          console.log(error)
+          addInfo("An error occurred", "error")
+        })
     } else {
-      setAlertClassName("")
-      setAlertMessage("Invalid credentials!")
-      setAlertType("error")
-      setTimeout(() => {
-        setAlertClassName("hidden")
-      }, 4000)
+      addInfo("No empty fields", "error")
     }
   }
 

@@ -1,6 +1,7 @@
 package com.example.backend.plant;
 
-import org.springframework.stereotype.Component;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -9,6 +10,13 @@ import java.util.List;
 
 @Service
 public class PlantService {
+
+    private final PlantRepository plantRepository;
+    @Autowired
+    public PlantService(PlantRepository plantRepository) {
+        this.plantRepository = plantRepository;
+    }
+
     public List<Plant> getPlants(){
         Plant plant1 = new Plant(
                 1L,
@@ -26,6 +34,7 @@ public class PlantService {
                 "Your Dracaena likes comfortable room temperatures between 65-80°F. The Dracaena is slow-growing and does not need much fertilizer. Feed once a month in the spring and summer with an all-purpose plant food, diluted to half-strength. No fertilizer is necessary during the fall and winter when plant growth naturally slows.",
                 LocalDate.of(2023, Month.SEPTEMBER, 12)
         );
+        plantRepository.saveAll(List.of(plant1, plant2));
         return List.of(plant1, plant2);
     }
 }

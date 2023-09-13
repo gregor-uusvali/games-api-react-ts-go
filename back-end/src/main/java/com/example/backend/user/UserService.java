@@ -1,10 +1,8 @@
 package com.example.backend.user;
 
-import com.example.backend.plant.Plant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserService {
@@ -21,8 +19,15 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
+    public User findByEmail(String email) { return userRepository.findByEmail(email); }
+
+    public boolean isPasswordMatch(String password, String hashedPW) {
+        return new BCryptPasswordEncoder().matches(password, hashedPW);
+    }
     // Save a new user to the database
     public User saveUser(User user) {
+        String hashedPW = new BCryptPasswordEncoder().encode(user.getPassword());
+        user.setPassword(hashedPW);
         return userRepository.save(user);
     }
 }

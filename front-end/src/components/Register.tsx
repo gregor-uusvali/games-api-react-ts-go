@@ -1,9 +1,7 @@
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import Input from "./form/Input";
 import { useOutletContext } from '../context/OutletContext';
 import { useNavigate } from "react-router-dom";
-import { error } from "console";
-
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -18,31 +16,58 @@ const Register = () => {
   const { setAlertType } = useOutletContext();
 
   const navigate = useNavigate()
+  
+  const addInfo = (str: React.SetStateAction<string>, type: React.SetStateAction<string>) => {
+      setAlertClassName("")
+      setAlertMessage(str)
+      setAlertType(type)
+      setTimeout(() => {
+        setAlertClassName("hidden")
+      }, 4000)
+  }
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    let payload = {
-        email,
-        firstName,
-        lastName,
-        password,
-        confirmPassword
-    }
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json")
-    const requestOptions = {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(payload)
-    }
-    fetch("http://localhost:8080/api/v1/register", requestOptions)
-        .then((response) => response.json()
-        .then(data => {
-            console.log(data)
+    if(password === confirmPassword){
+      let payload = {
+          email,
+          firstName,
+          lastName,
+          password,
+          confirmPassword
+      }
+      const headers = new Headers();
+      headers.append("Content-Type", "application/json")
+      const requestOptions = {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify(payload)
+      }
+      fetch("http://localhost:8080/api/v1/register", requestOptions)
+        .then(async (response) => {
+          if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+            addInfo("Succesfully registered", "success")
+            navigate("/login");
+          } else {
+            const errorText = await response.text();
+            if (errorText === "Email is already taken") {
+              // Handle the specific email taken error
+              addInfo(errorText, "error");
+            } else {
+              // Handle other error cases
+              addInfo("An error occurred", "error");
+            }
+          }
         })
-        .catch(error => {
-            console.log(error)
-        }))
+        .catch((error) => {
+          console.log(error)
+          addInfo("An error occurred", "error")
+        });
+    } else {
+      addInfo("Passwords must match!", "error")
+    }
   }
 
   return (
@@ -108,6 +133,9 @@ const Register = () => {
               value="Register"
             />
           </div>
+          <p className="mt-4 text-sm font-light text-black-500 dark:text-black-400">
+            Already have an account? <a href="/login" className="font-bold text-primary-600 hover:underline dark:text-primary-500">Log in</a>
+          </p>
         </form>
       </div>
     </div>

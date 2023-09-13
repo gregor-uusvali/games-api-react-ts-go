@@ -18,8 +18,11 @@ public class Plant {
     )
     private Long id;
     private String name;
+    @Column(length = 1000)
     private String description;
+    @Column(length = 1000)
     private String image;
+    @Column(length = 1000)
     private String instruction;
 
 

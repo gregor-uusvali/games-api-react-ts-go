@@ -54,7 +54,7 @@ function App() {
                 <Link to="/family" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Family</Link>
                 {jwtToken !== "" &&
                   <>
-                    <Link to="/admin/plant/0" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Add Plant</Link>
+                    <Link to="/admin/plant/0" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Add/Edit Plants</Link>
                     <Link to="/manage-plants" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Manage Plants</Link>
                     <Link to="/graphql" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">GraphQL</Link>
                   </>
@@ -64,7 +64,7 @@ function App() {
           </div>
           <div className='w-full mx-4'>
             <Alert type={alertType} message={alertMessage} className={alertClassName} />
-            <div className="mx-auto w-4/5 flex justify-center">
+            <div className="mx-auto w-full flex justify-center">
               <Outlet />
             </div>
           </div>
