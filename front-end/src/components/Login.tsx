@@ -27,7 +27,7 @@ const Login = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (email !== "" && password !== "") {
+    if (email !== "" || password !== "") {
       let payload = {
         email,
         password
@@ -89,7 +89,7 @@ const Login = () => {
           </div>
           <div className="flex items-center justify-center">
             <input
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="hover:cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
               value="Login"
             />

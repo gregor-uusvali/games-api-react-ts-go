@@ -1,10 +1,9 @@
 package com.example.backend.plant;
 
+import com.example.backend.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,5 +22,13 @@ public class PlantController {
     @GetMapping
     public List<Plant> getPlants(){
         return plantService.getPlants();
+    }
+
+    @PostMapping(path="/add")
+    public ResponseEntity<?> addPlant(@RequestBody Plant plant) {
+        Plant addedPlant = plantService.addPlant(plant);
+
+        // You can return a success response or the saved user object
+        return ResponseEntity.ok(addedPlant);
     }
 }
