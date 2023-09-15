@@ -88,10 +88,12 @@
 
 
 .flip-card {
+  position: relative;
   background-color: transparent;
   /* width: 256px; */
   perspective: 1000px;
   border-radius: 0.5rem;
+  height: 300px;
 }
 
 .flip-card-inner {

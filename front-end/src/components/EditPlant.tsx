@@ -5,6 +5,7 @@ import { PlantType } from "./Plants";
 
 const EditPlant = () => {
   const [name, setName] = useState("");
+  const [initialName, setInitialName] = useState(""); // Initialize with an empty string
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const [instruction, setInstruction] = useState("");
@@ -85,6 +86,7 @@ const EditPlant = () => {
             setDescription("")
             setImage("")
             setInstruction("")
+            getPlants()
           } else {
             const errorText = await response.text();
             addInfo(errorText, "error");
@@ -100,7 +102,7 @@ const EditPlant = () => {
     }
   }
 
-  useEffect(() => {
+  const getPlants = () => {
     const headers = new Headers()
     headers.append("Content-Type", "application/json")
 
@@ -116,6 +118,13 @@ const EditPlant = () => {
       .catch(err => {
         console.log(err)
       })
+  }
+
+  useEffect(() => {
+    getPlants()
+    if (plants.length > 0) {
+      setInitialName(plants[0].name); // Assuming plants is an array of objects
+    }
   }, [])
 
   return (
@@ -124,7 +133,7 @@ const EditPlant = () => {
         <h2 className="text-2xl font-bold">Add/Edit Plants</h2>
         <hr className="my-4" />
         {/* cards here */}
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4">
           <div onClick={doTheFlip} className="flip-card w-64">
             <div className="flip-card-inner">
               <div className="flip-card-front card h-full bg-white border border-gray-200 rounded-lg shadow dark:border-gray-700 flex items-center justify-center transition duration-300 hover:bg-gray-700">
@@ -210,7 +219,11 @@ const EditPlant = () => {
                       title="Name"
                       className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       onChange={(event: { target: { value: any; }; }) => setName(event.target.value)}
-                      autoComplete="name-new" placeholder="" value={(clicked && name == "") ? m.name : name} errorDiv={""} errorMsg={""}
+                      autoComplete="name-new" 
+                      placeholder="" 
+                      value={name === "" ? m.name : name} 
+                      errorDiv={""} 
+                      errorMsg={""}
                     />
                   </div>
                   <div className="-m-1">
@@ -220,7 +233,7 @@ const EditPlant = () => {
                       title="Description"
                       className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       onChange={(event: { target: { value: any; }; }) => setDescription(event.target.value)}
-                      autoComplete="description-new" placeholder={""} value={description} errorDiv={""} errorMsg={""}
+                      autoComplete="description-new" placeholder={""} value={description === "" ? m.description : description} errorDiv={""} errorMsg={""}
                     />
                   </div>
                   <div className="-m-1">
@@ -230,7 +243,7 @@ const EditPlant = () => {
                       title="Image"
                       className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       onChange={(event: { target: { value: any; }; }) => setImage(event.target.value)}
-                      autoComplete="image-new" placeholder={""} value={image} errorDiv={""} errorMsg={""}
+                      autoComplete="image-new" placeholder={""} value={image === "" ? m.image : image} errorDiv={""} errorMsg={""}
                     />
                   </div>
                   <div className="-m-1">
@@ -240,7 +253,7 @@ const EditPlant = () => {
                       title="Instruction"
                       className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       onChange={(event: { target: { value: any; }; }) => setInstruction(event.target.value)}
-                      autoComplete="instruction-new" placeholder={""} value={instruction} errorDiv={""} errorMsg={""}
+                      autoComplete="instruction-new" placeholder={""} value={instruction === "" ? m.instruction : instruction} errorDiv={""} errorMsg={""}
                     />
                   </div>
                   <div className="flex items-center justify-center gap-5 mt-4">

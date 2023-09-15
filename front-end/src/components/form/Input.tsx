@@ -1,4 +1,4 @@
-import { ChangeEventHandler, Ref, forwardRef } from "react";
+import { ChangeEventHandler, FocusEventHandler, Ref, forwardRef } from "react";
 
 interface InputProps {
     name: string,
@@ -6,7 +6,9 @@ interface InputProps {
     title: string,
     className: string,
     placeholder: string,
-    onChange: ChangeEventHandler<HTMLInputElement>, // Change the prop type
+    onChange: ChangeEventHandler<HTMLInputElement>,
+    onFocus?: FocusEventHandler<HTMLInputElement>, // Add onFocus prop
+    onBlur?: FocusEventHandler<HTMLInputElement>, // Add onBlur prop
     autoComplete: string,
     value: string,
     errorDiv: string,
@@ -30,6 +32,8 @@ const Input = forwardRef((props: InputProps, ref: Ref<HTMLInputElement>) => {
                 onChange={props.onChange}
                 autoComplete={props.autoComplete}
                 value={props.value}
+                onFocus={props.onFocus} // Pass onFocus prop
+                onBlur={props.onBlur}   // Pass onBlur prop
             />
             <div className={props.errorDiv}>{props.errorMsg}</div>
         </div>
