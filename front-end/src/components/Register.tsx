@@ -47,7 +47,6 @@ const Register = () => {
         .then(async (response) => {
           if (response.ok) {
             const data = await response.json();
-            console.log(data);
             addInfo("Succesfully registered", "success")
             navigate("/login");
           } else {
