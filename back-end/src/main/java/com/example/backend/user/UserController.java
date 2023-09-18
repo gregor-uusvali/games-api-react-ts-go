@@ -29,7 +29,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
         }
         String message = "Login successful";
-        return ResponseEntity.ok().body("{\"message\": \"" + message + "\"}");
+        return ResponseEntity.ok().body("{\"userId\": \"" + user.getId() + "\"}");
 
     }
     @PostMapping("/register")

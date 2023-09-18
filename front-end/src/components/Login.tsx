@@ -9,6 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { setCurrentUserId } = useOutletContext();
   const { setJwtToken } = useOutletContext();
   const { setAlertClassName } = useOutletContext();
   const { setAlertMessage } = useOutletContext();
@@ -43,6 +44,8 @@ const Login = () => {
         .then(async (response) => {
           if (response.ok) {
             const data = await response.json();
+            const userID: number = parseInt(data.userId)
+            setCurrentUserId(userID)
             setJwtToken("abc")
             navigate("/");
           } else {

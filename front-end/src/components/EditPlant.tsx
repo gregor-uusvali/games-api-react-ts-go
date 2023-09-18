@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from "react";
 import Input from "./form/Input";
 import { useOutletContext } from '../context/OutletContext';
 import { PlantType } from "./Plants";
+import ConfirmationModal from "./modal/ConfirmationModal";
 
 const EditPlant = () => {
   const [plantId, setPlantId] = useState(0)
@@ -11,6 +12,7 @@ const EditPlant = () => {
   const [instruction, setInstruction] = useState("");
   const [plants, setPlants] = useState<PlantType[]>([])
   const [clicked, setClicked] = useState(false)
+  const [isConfirmationOpen, setConfirmationOpen] = useState(false);
 
   const { setAlertClassName } = useOutletContext();
   const { setAlertMessage } = useOutletContext();
@@ -31,8 +33,17 @@ const EditPlant = () => {
   }
 
   const openConfirmation = () => {
-    
-  }
+    setConfirmationOpen(true)
+  };
+
+  const handleConfirmCancel = () => {
+    setConfirmationOpen(false);
+  };
+
+  const handleConfirm = (e: any) => {
+    handleDelete(e)
+    setConfirmationOpen(false);
+  };
 
 
   const addInfo = (str: React.SetStateAction<string>, type: React.SetStateAction<string>) => {
@@ -129,48 +140,51 @@ const EditPlant = () => {
 
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault();
+    if (name !== "" && description !== "" && image !== "" && instruction !== "") {
+      const updatedName = name;
+      const updatedDescription = description;
+      const updatedImage = image;
+      const updatedInstruction = instruction;
 
-    const updatedName = name;
-    const updatedDescription = description;
-    const updatedImage = image;
-    const updatedInstruction = instruction;
+      const updatedData = {
+        name: updatedName,
+        description: updatedDescription,
+        image: updatedImage,
+        instruction: updatedInstruction,
+      };
 
-    const updatedData = {
-      name: updatedName,
-      description: updatedDescription,
-      image: updatedImage,
-      instruction: updatedInstruction,
-    };
+      const requestOptions = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+      };
 
-    const requestOptions = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedData),
-    };
-
-    fetch(`http://localhost:8080/api/v1/plants/${plantId}`, requestOptions)
-      .then(async (response) => {
-        if (response.ok) {
-          // Handle success
-          addInfo("Plant edited!", "success")
-          removeTheFlip(e)
-          setPlantId(0)
-          setName("")
-          setDescription("")
-          setImage("")
-          setInstruction("")
-          getPlants()
-        } else {
-          const errorText = await response.text();
-          addInfo(errorText, "error");
-        }
-      })
-      .catch((error) => {
-        console.log(error)
+      fetch(`http://localhost:8080/api/v1/plants/${plantId}`, requestOptions)
+        .then(async (response) => {
+          if (response.ok) {
+            // Handle success
+            addInfo("Plant edited!", "success")
+            removeTheFlip(e)
+            setPlantId(0)
+            setName("")
+            setDescription("")
+            setImage("")
+            setInstruction("")
+            getPlants()
+          } else {
+            const errorText = await response.text();
+            addInfo(errorText, "error");
+          }
+        })
+        .catch((error) => {
+          console.log(error)
           addInfo("An error has occured", "error")
-      });
+        });
+    } else {
+      addInfo("No empty fields", "error")
+    }
   };
 
   const handleDelete = (e: any) => {
@@ -201,7 +215,7 @@ const EditPlant = () => {
       })
       .catch((error) => {
         console.log(error)
-          addInfo("An error has occured", "error")
+        addInfo("An error has occured", "error")
       });
   }
 
@@ -375,8 +389,16 @@ const EditPlant = () => {
                         className="text-sm hover:cursor-pointer bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded focus:outline-none focus:shadow-outline"
                         type="button"
                         value="Delete"
-                        onClick={handleDelete}
+                        onClick={openConfirmation}
                       />
+                    </div>
+                    <div>
+                      <ConfirmationModal
+                        isOpen={isConfirmationOpen}
+                        onConfirm={(e: any) => handleConfirm(e)}
+                        onCancel={handleConfirmCancel}
+                      />
+
                     </div>
                   </form>
                 </div>

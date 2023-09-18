@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './styles/tailwind.css'; // Import Tailwind CSS
-import Home from "./components/Home"
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { OutletContext } from './context/OutletContext';
 import Alert from './components/Alert';
@@ -10,6 +9,7 @@ function App() {
   const [alertMessage, setAlertMessage] = useState("")
   const [alertClassName, setAlertClassName] = useState("hidden")
   const [alertType, setAlertType] = useState("")
+  const [currentUserId, setCurrentUserId] = useState<number>(0); // Initialize with your initial value
 
   const navigate = useNavigate()
 
@@ -28,12 +28,15 @@ function App() {
       alertClassName,
       setAlertClassName,
       alertType,
-      setAlertType
+      setAlertType,
+      currentUserId,
+      setCurrentUserId,
     }}>
       <div className="container mx-auto">
         <div className="flex justify-between mt-3 mb-3">
           <div className="flex-grow">
-            <h1 className='text-3xl font-bold'>Water a plant 🪴</h1>
+              <h1 className='w-fit text-3xl font-bold'> <Link to="/">Water a plant 🪴</Link></h1>
+            
           </div>
           <div className="flex text-end items-center">
             {jwtToken === ""

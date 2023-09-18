@@ -47,7 +47,7 @@ const Plants = () => {
                                     <th scope="col" className="px-6 py-3">
                                         Date
                                     </th>
-                                    <th scope="col" className="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3 text-center">
                                         Image
                                     </th>
                                 </tr>

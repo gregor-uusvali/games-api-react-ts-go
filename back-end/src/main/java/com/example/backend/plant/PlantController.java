@@ -42,4 +42,9 @@ public class PlantController {
     public void deletePlant(@PathVariable Long id){
         plantService.deletePlant(id);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<Plant> getPlant(@PathVariable Long id){
+        Plant plant = plantService.getPlantById(id);
+        return ResponseEntity.ok(plant);
+    }
 }

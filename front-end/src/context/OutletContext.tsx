@@ -9,6 +9,8 @@ interface OutletContextType {
     setAlertMessage: React.Dispatch<React.SetStateAction<string>>;
     alertType: string;
     setAlertType: React.Dispatch<React.SetStateAction<string>>;
+    currentUserId: number; // Add currentUserId to the context
+    setCurrentUserId: React.Dispatch<React.SetStateAction<number>>; // Add setCurrentUserId to the context
 }
 
 export const OutletContext = React.createContext<OutletContextType | undefined>(undefined);

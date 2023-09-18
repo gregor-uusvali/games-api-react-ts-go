@@ -135,6 +135,13 @@
   height: 300px;
 }
 
-.newbg {
-  background-color: black;
+#myImage{
+  transition: 2s;
 }
+
+#myImage:hover{
+  filter: invert(1);
+  cursor: pointer;
+
+}
+

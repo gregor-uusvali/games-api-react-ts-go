@@ -13,10 +13,18 @@ const Plant = () => {
       method: "GET",
       headers: headers
     }
-    fetch(`http://localhost:8080/api/v1/plant/${id}/`, requestOptions)
+    fetch(`http://localhost:8080/api/v1/plants/${id}`, requestOptions)
       .then((response) => response.json()
         .then(data => {
-          console.log(data)
+          let plant = {
+            id: data.id,
+            name: data.name,
+            description: data.description,
+            image: data.image,
+            instruction: data.instruction,
+            date: data.date,
+          }
+          setPlant(plant)
         })
         .catch(error => {
           console.log(error)
@@ -27,15 +35,6 @@ const Plant = () => {
 
   useEffect(() => {
     fetchPlant()
-    let plant = {
-      id: 1,
-      name: "Schlumbergera",
-      description: "Schlumbergera is a small genus of cacti with six to nine species found in the coastal mountains of south-eastern Brazil. These plants grow on trees or rocks in habitats that are generally shady with high humidity, and can be quite different in appearance from their desert-dwelling cousins.",
-      image: "https://juhendaja.ee/wp-content/uploads/2014/10/120.jpg",
-      instruction: "Mist your plant a few times a week, or place on a pebble-filled tray of water. Feed monthly in spring or summer with a general fertiliser. Schlumbergera don't need pruning, but the stems can get leggy or too long. Make the plant more bushy by removing the tips after the plant has flowered.",
-      date: "2023-09-12",
-    }
-    setPlant(plant)
   }, [id])
 
   return (

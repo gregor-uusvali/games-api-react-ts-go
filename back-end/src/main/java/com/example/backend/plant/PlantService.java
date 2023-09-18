@@ -1,14 +1,11 @@
 package com.example.backend.plant;
 
-import com.example.backend.user.User;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlantService {
@@ -66,5 +63,10 @@ public class PlantService {
 
         // Save the updated plant
         plantRepository.delete(existingPlant);
+    }
+    public Plant getPlantById(Long id) {
+        Plant plant = plantRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Plant not found with id: " + id));
+        return plant;
     }
 }
