@@ -31,4 +31,15 @@ public class PlantController {
         // You can return a success response or the saved user object
         return ResponseEntity.ok(addedPlant);
     }
+    @PutMapping("/{id}")
+    public void updatePlant(
+            @PathVariable Long id,
+            @RequestBody Plant request
+    ) {
+        plantService.updatePlant(id, request.getName(), request.getDescription(), request.getImage(), request.getInstruction());
+    }
+    @DeleteMapping("/{id}")
+    public void deletePlant(@PathVariable Long id){
+        plantService.deletePlant(id);
+    }
 }

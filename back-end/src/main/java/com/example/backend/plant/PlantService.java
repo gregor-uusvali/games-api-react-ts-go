@@ -43,4 +43,28 @@ public class PlantService {
     public Plant addPlant(Plant plant) {
         return plantRepository.save(plant);
     }
+
+    @Transactional
+    public void updatePlant(Long id, String name, String description, String image, String instruction) {
+        Plant existingPlant = plantRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Plant not found with id: " + id));
+
+        // Update the plant's attributes
+        existingPlant.setName(name);
+        existingPlant.setDescription(description);
+        existingPlant.setImage(image);
+        existingPlant.setInstruction(instruction);
+
+        // Save the updated plant
+        plantRepository.save(existingPlant);
+    }
+
+    @Transactional
+    public void deletePlant(Long id) {
+        Plant existingPlant = plantRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Plant not found with id: " + id));
+
+        // Save the updated plant
+        plantRepository.delete(existingPlant);
+    }
 }
