@@ -38,6 +38,7 @@ public class PlantService {
     }
 
     public Plant addPlant(Plant plant) {
+        System.out.println(plant);
         return plantRepository.save(plant);
     }
 
@@ -61,6 +62,19 @@ public class PlantService {
         Plant existingPlant = plantRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Plant not found with id: " + id));
 
+        // Retrieve the file path of the associated image
+        String imagePath = existingPlant.getImage();
+
+        // Check if the image path is not null or empty
+        if (imagePath != null && !imagePath.isEmpty()) {
+            // Delete the image file from the file system
+            // Find the last occurrence of the slash ("/")
+            int lastIndex = imagePath.lastIndexOf('/');
+
+            String fileName = imagePath.substring(lastIndex + 1);
+
+            System.out.println(fileName);
+        }
         // Save the updated plant
         plantRepository.delete(existingPlant);
     }

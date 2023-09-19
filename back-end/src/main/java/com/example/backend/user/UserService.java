@@ -29,5 +29,6 @@ public class UserService {
         String hashedPW = new BCryptPasswordEncoder().encode(user.getPassword());
         user.setPassword(hashedPW);
         return userRepository.save(user);
+
     }
 }

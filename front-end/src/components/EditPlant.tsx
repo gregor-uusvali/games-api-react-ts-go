@@ -5,13 +5,14 @@ import { PlantType } from "./Plants";
 import ConfirmationModal from "./modal/ConfirmationModal";
 
 const EditPlant = () => {
-  const [plantId, setPlantId] = useState(0)
+  const [plantId, setPlantId] = useState(0);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState<File | undefined>();
+  // const [file, setFile] = useState<File | undefined>();
   const [instruction, setInstruction] = useState("");
-  const [plants, setPlants] = useState<PlantType[]>([])
-  const [clicked, setClicked] = useState(false)
+  const [plants, setPlants] = useState<PlantType[]>([]);
+  const [clicked, setClicked] = useState(false);
   const [isConfirmationOpen, setConfirmationOpen] = useState(false);
 
   const { setAlertClassName } = useOutletContext();
@@ -25,7 +26,7 @@ const EditPlant = () => {
         setPlantId(plantId)
         setName(plants[i].name)
         setDescription(plants[i].description)
-        setImage(plants[i].image)
+        setImage(undefined)
         setInstruction(plants[i].instruction)
         break
       }
@@ -66,7 +67,7 @@ const EditPlant = () => {
         setPlantId(0)
         setName("")
         setDescription("")
-        setImage("")
+        setImage(undefined)
         setInstruction("")
       }
       const elementsWithClass = document.querySelectorAll('.do-the-flip');
@@ -85,6 +86,7 @@ const EditPlant = () => {
 
   const removeTheFlip = (e: { stopPropagation: () => void; }) => {
     setClicked(false)
+    clearInputFile()
     e.stopPropagation(); // Prevent the click event from propagating to parent elements
     const flipCardInnerElements = document.querySelectorAll('.flip-card-inner');
     flipCardInnerElements.forEach((element) => {
@@ -93,54 +95,54 @@ const EditPlant = () => {
   }
 
   const handleAdd = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (name !== "" || description !== "" || image !== "" || instruction !== "") {
+    e.preventDefault();
+
+    if (name !== "" || description !== "" || image !== undefined || instruction !== "") {
       const currentDate = new Date(); // Get the current date
-      let payload = {
-        name,
-        description,
-        image,
-        instruction,
-        date: currentDate.toISOString().substring(0, 10),
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("description", description);
+      if (image) {
+        formData.append("image", image);
       }
-      const headers = new Headers()
-      headers.append("Content-Type", "application/json")
+      formData.append("instruction", instruction);
+      formData.append("date", currentDate.toISOString().substring(0, 10));
+
       const requestOptions = {
         method: "POST",
-        headers: headers,
-        body: JSON.stringify(payload)
-      }
+        body: formData,
+      };
+
       fetch("http://localhost:8080/api/v1/plants/add", requestOptions)
-        .then(async response => {
+        .then(async (response) => {
           if (response.ok) {
-            const data = await response.json()
-            console.log(data)
-            addInfo("New plant added!", "success")
-            removeTheFlip(e)
-            setPlantId(0)
-            setName("")
-            setDescription("")
-            setImage("")
-            setInstruction("")
-            getPlants()
+            const data = await response.json();
+            console.log(data);
+            addInfo("New plant added!", "success");
+            removeTheFlip(e);
+            setPlantId(0);
+            setName("");
+            setDescription("");
+            setImage(undefined);
+            setInstruction("");
+            getPlants();
           } else {
             const errorText = await response.text();
             addInfo(errorText, "error");
           }
         })
-        .catch(error => {
-          console.log(error)
-          addInfo("An error has occured", "error")
-        })
-
+        .catch((error) => {
+          console.log(error);
+          addInfo("An error has occurred", "error");
+        });
     } else {
-      addInfo("No empty fields", "error")
+      addInfo("No empty fields", "error");
     }
-  }
+  };
 
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name !== "" && description !== "" && image !== "" && instruction !== "") {
+    if (name !== "" && description !== "" && image !== undefined && instruction !== "") {
       const updatedName = name;
       const updatedDescription = description;
       const updatedImage = image;
@@ -170,7 +172,7 @@ const EditPlant = () => {
             setPlantId(0)
             setName("")
             setDescription("")
-            setImage("")
+            setImage(undefined)
             setInstruction("")
             getPlants()
           } else {
@@ -205,7 +207,7 @@ const EditPlant = () => {
           setPlantId(0)
           setName("")
           setDescription("")
-          setImage("")
+          setImage(undefined)
           setInstruction("")
           getPlants()
         } else {
@@ -236,12 +238,26 @@ const EditPlant = () => {
         console.log(err)
       })
   }
+  const handleFileChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement & {
+      files: FileList;
+    }
+    setImage(target.files[0])
+    console.log('target', target.files)
+  }
+  const clearInputFile = () => {
+    const inputs = document.querySelectorAll<HTMLInputElement>(".inputFileClass");
+    inputs.forEach(input => {
+      input.value = "";
+    });
+  };
 
   useEffect(() => {
     getPlants()
     if (plants.length > 0) {
     }
   }, [])
+
 
   return (
     <div className="w-full mx-4">
@@ -250,7 +266,7 @@ const EditPlant = () => {
         <hr className="my-4" />
         {/* cards here */}
         <div className="flex flex-wrap gap-4">
-          <div onClick={(e) => doTheFlip(e)} className="flip-card w-64">
+          <div onClick={(e) => doTheFlip(e)} className="flip-card w-96">
             <div className="flip-card-inner">
               <div className="flip-card-front card h-full bg-white border border-gray-200 rounded-lg shadow dark:border-gray-700 flex items-center justify-center transition duration-300 hover:bg-gray-700">
                 <svg className="svg-icon w-20 h-20 text-gray-700 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -270,35 +286,44 @@ const EditPlant = () => {
                       autoComplete="name-new" placeholder="" value={name} errorDiv={""} errorMsg={""}
                     />
                   </div>
-                  <div className="-m-1">
-                    <Input
+                  <div className="mx-8">
+                    <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-1">Description</label>
+                    <textarea
                       name="description"
-                      type="text"
                       title="Description"
-                      className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      onChange={(event: { target: { value: any; }; }) => setDescription(event.target.value)}
-                      autoComplete="description-new" placeholder={""} value={description} errorDiv={""} errorMsg={""}
+                      id="message"
+                      rows={3}
+                      className="block p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg shadow appearance-none mb-3"
+                      onChange={(event) => setDescription(event.target.value)}
+                      autoComplete="description-new"
+                      placeholder={""}
+                      value={description}
+                    />
+                  </div>
+                  <div className="mx-8">
+                    <label htmlFor="instruction" className="block text-gray-700 text-sm font-bold mb-1">Instruction</label>
+                    <textarea
+                      name="instruction"
+                      title="Instruction"
+                      id="message"
+                      rows={3}
+                      className="block p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg shadow appearance-none mb-3"
+                      onChange={(event) => setInstruction(event.target.value)}
+                      autoComplete="instruction-new"
+                      placeholder={""}
+                      value={instruction}
                     />
                   </div>
                   <div className="-m-1">
-                    <Input
+                    <input className="inputFileClass" type="file" name="image" onChange={handleFileChange} />
+                    {/* <Input
                       name="image"
-                      type="text"
+                      type="file"
                       title="Image"
                       className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       onChange={(event: { target: { value: any; }; }) => setImage(event.target.value)}
                       autoComplete="image-new" placeholder={""} value={image} errorDiv={""} errorMsg={""}
-                    />
-                  </div>
-                  <div className="-m-1">
-                    <Input
-                      name="instruction"
-                      type="text"
-                      title="Instruction"
-                      className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      onChange={(event: { target: { value: any; }; }) => setInstruction(event.target.value)}
-                      autoComplete="instruction-new" placeholder={""} value={instruction} errorDiv={""} errorMsg={""}
-                    />
+                    /> */}
                   </div>
                   <div className="flex items-center justify-center gap-5 mt-4">
                     <input
@@ -318,7 +343,7 @@ const EditPlant = () => {
             </div>
           </div>
           {plants.map((m) => (
-            <div key={m.id} onClick={(e) => doTheFlip(e, m.id)} className="flip-card w-64">
+            <div key={m.id} onClick={(e) => doTheFlip(e, m.id)} className="flip-card w-96">
               <div className="flip-card-inner">
                 <div className="flip-card-front card h-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-700">
                   <img className="h-4/5 w-full rounded-t-lg" src={m.image} alt="plant-image" />
@@ -333,7 +358,7 @@ const EditPlant = () => {
                         name="name"
                         type="text"
                         title="Name"
-                        className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline focus:shadow-outline"
                         onChange={(event: { target: { value: any; }; }) => setName(event.target.value)}
                         autoComplete="name-new"
                         placeholder=""
@@ -342,35 +367,44 @@ const EditPlant = () => {
                         errorMsg={""}
                       />
                     </div>
-                    <div className="-m-1">
-                      <Input
+                    <div className="mx-8">
+                      <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-1">Description</label>
+                      <textarea
                         name="description"
-                        type="text"
                         title="Description"
-                        className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        onChange={(event: { target: { value: any; }; }) => setDescription(event.target.value)}
-                        autoComplete="description-new" placeholder={""} value={description} errorDiv={""} errorMsg={""}
+                        id="message"
+                        rows={3}
+                        className="block p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg shadow appearance-none mb-3"
+                        onChange={(event) => setDescription(event.target.value)}
+                        autoComplete="description-new"
+                        placeholder={""}
+                        value={description}
+                      />
+                    </div>
+                    <div className="mx-8">
+                      <label htmlFor="instruction" className="block text-gray-700 text-sm font-bold mb-1">Instruction</label>
+                      <textarea
+                        name="instruction"
+                        title="Instruction"
+                        id="message"
+                        rows={3}
+                        className="block p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg shadow appearance-none mb-3"
+                        onChange={(event) => setInstruction(event.target.value)}
+                        autoComplete="instruction-new"
+                        placeholder={""}
+                        value={instruction}
                       />
                     </div>
                     <div className="-m-1">
-                      <Input
+                      <input type="file" name="image" onChange={handleFileChange} />
+                      {/* <Input
                         name="image"
-                        type="text"
+                        type="file"
                         title="Image"
-                        className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline focus:shadow-outline"
                         onChange={(event: { target: { value: any; }; }) => setImage(event.target.value)}
                         autoComplete="image-new" placeholder={""} value={image} errorDiv={""} errorMsg={""}
-                      />
-                    </div>
-                    <div className="-m-1">
-                      <Input
-                        name="instruction"
-                        type="text"
-                        title="Instruction"
-                        className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        onChange={(event: { target: { value: any; }; }) => setInstruction(event.target.value)}
-                        autoComplete="instruction-new" placeholder={""} value={instruction} errorDiv={""} errorMsg={""}
-                      />
+                      /> */}
                     </div>
                     <div className="flex items-center justify-center gap-5 mt-4">
                       <input

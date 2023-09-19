@@ -93,7 +93,7 @@
   /* width: 256px; */
   perspective: 1000px;
   border-radius: 0.5rem;
-  height: 300px;
+  height: 450px;
 }
 
 .flip-card-inner {
@@ -124,7 +124,7 @@
   background-color: white;
   color: black;
   border-radius: 0.5rem;
-  height: 300px;
+  height: 450px;
 }
 
 .flip-card-back {
@@ -132,7 +132,7 @@
   color: white;
   transform: rotateY(180deg);
   border-radius: 0.5rem;
-  height: 300px;
+  height: 450px;
 }
 
 #myImage{
@@ -145,3 +145,6 @@
 
 }
 
+textarea {
+  resize: none;
+}
