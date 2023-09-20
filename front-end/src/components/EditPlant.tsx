@@ -413,7 +413,7 @@ const EditPlant = () => {
                       <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-1">Image</label>
                       <input className="inputFileClass" type="file" name="image" onChange={handleFileChange} />
                     </div>
-                    <div className="flex items-center justify-center gap-5 mt-5">
+                    <div className="flex items-center justify-center gap-5 mt-3">
                       <input
                         className="text-sm hover:cursor-pointer bg-gray-500 hover:bg-gray-700 text-white  py-2 px-3 rounded focus:outline-none focus:shadow-outline"
                         type="button"
