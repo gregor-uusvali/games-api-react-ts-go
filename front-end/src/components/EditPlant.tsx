@@ -9,18 +9,17 @@ const EditPlant = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | undefined>();
-  // const [file, setFile] = useState<File | undefined>();
   const [instruction, setInstruction] = useState("");
   const [plants, setPlants] = useState<PlantType[]>([]);
   const [clicked, setClicked] = useState(false);
   const [isConfirmationOpen, setConfirmationOpen] = useState(false);
+  const [activeCardId, setActiveDardId] = useState<number | null>(null)
 
   const { setAlertClassName } = useOutletContext();
   const { setAlertMessage } = useOutletContext();
   const { setAlertType } = useOutletContext();
 
   const setInitialVals = (plantId: number) => {
-    // Access the form field values from the state variable
     for (let i = 0; i < plants.length; i++) {
       if (plants[i].id === plantId) {
         setPlantId(plantId)
@@ -60,6 +59,7 @@ const EditPlant = () => {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     plantId: number | null = null
   ) => {
+    setActiveDardId(plantId)
     if (!clicked) {
       if (plantId !== null) {
         setInitialVals(plantId)
@@ -79,9 +79,35 @@ const EditPlant = () => {
       if (childElement) {
         childElement.classList.add('do-the-flip');
       }
+    } else {
+      const flipCardInnerElements = document.querySelectorAll('.flip-card-inner');
+      flipCardInnerElements.forEach((element) => {
+        element.classList.remove('do-the-flip');
+      });
+      if (plantId !== activeCardId) {
+        if (plantId !== null) {
+          setInitialVals(plantId)
+        } else {
+          setPlantId(0)
+          setName("")
+          setDescription("")
+          setImage(undefined)
+          setInstruction("")
+        }
+
+      }
+      const elementsWithClass = document.querySelectorAll('.do-the-flip');
+      elementsWithClass.forEach((element) => {
+        element.classList.remove('do-the-flip');
+      });
+      // Add the 'do-the-flip' class to the target element
+      const childElement = e.currentTarget.querySelector('.flip-card-inner');
+      if (childElement) {
+        childElement.classList.add('do-the-flip');
+      }
     }
     setClicked(true);
-
+    setActiveDardId(plantId)
   }
 
   const removeTheFlip = (e: { stopPropagation: () => void; }) => {
@@ -97,7 +123,7 @@ const EditPlant = () => {
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (name !== "" || description !== "" || image !== undefined || instruction !== "") {
+    if (name !== "" && description !== "" && image !== undefined && instruction !== "") {
       const currentDate = new Date(); // Get the current date
       const formData = new FormData();
       formData.append("name", name);
@@ -142,31 +168,27 @@ const EditPlant = () => {
 
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name !== "" && description !== "" && image !== undefined && instruction !== "") {
+    if (name !== "" && description !== "" && instruction !== "") {
+      const formData = new FormData();
       const updatedName = name;
       const updatedDescription = description;
-      const updatedImage = image;
       const updatedInstruction = instruction;
-
-      const updatedData = {
-        name: updatedName,
-        description: updatedDescription,
-        image: updatedImage,
-        instruction: updatedInstruction,
-      };
+      formData.append("name", updatedName);
+      formData.append("description", updatedDescription);
+      formData.append("instruction", updatedInstruction);
+      if (image) {
+        const updatedImage = image;
+        formData.append("image", updatedImage);
+      }
 
       const requestOptions = {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedData),
+        body: formData,
       };
 
       fetch(`http://localhost:8080/api/v1/plants/${plantId}`, requestOptions)
         .then(async (response) => {
           if (response.ok) {
-            // Handle success
             addInfo("Plant edited!", "success")
             removeTheFlip(e)
             setPlantId(0)
@@ -201,7 +223,6 @@ const EditPlant = () => {
     fetch(`http://localhost:8080/api/v1/plants/${plantId}`, requestOptions)
       .then(async (response) => {
         if (response.ok) {
-          // Handle success
           addInfo("Plant deleted!", "success")
           removeTheFlip(e)
           setPlantId(0)
@@ -316,14 +337,6 @@ const EditPlant = () => {
                   </div>
                   <div className="-m-1">
                     <input className="inputFileClass" type="file" name="image" onChange={handleFileChange} />
-                    {/* <Input
-                      name="image"
-                      type="file"
-                      title="Image"
-                      className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      onChange={(event: { target: { value: any; }; }) => setImage(event.target.value)}
-                      autoComplete="image-new" placeholder={""} value={image} errorDiv={""} errorMsg={""}
-                    /> */}
                   </div>
                   <div className="flex items-center justify-center gap-5 mt-4">
                     <input
@@ -396,15 +409,7 @@ const EditPlant = () => {
                       />
                     </div>
                     <div className="-m-1">
-                      <input type="file" name="image" onChange={handleFileChange} />
-                      {/* <Input
-                        name="image"
-                        type="file"
-                        title="Image"
-                        className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline focus:shadow-outline"
-                        onChange={(event: { target: { value: any; }; }) => setImage(event.target.value)}
-                        autoComplete="image-new" placeholder={""} value={image} errorDiv={""} errorMsg={""}
-                      /> */}
+                      <input className="inputFileClass" type="file" name="image" onChange={handleFileChange} />
                     </div>
                     <div className="flex items-center justify-center gap-5 mt-4">
                       <input
