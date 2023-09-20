@@ -67,14 +67,17 @@ public class PlantService {
     }
 
     public void deletePlantImgFile(String imagePath) throws IOException {
-        if (imagePath != null && !imagePath.isEmpty()) {
+        try{
+            if (imagePath != null && !imagePath.isEmpty()) {
 
-            int lastIndex = imagePath.lastIndexOf('/');
+                int lastIndex = imagePath.lastIndexOf('/');
 
-            String fileName = imagePath.substring(lastIndex + 1);
-            Path fileToDeletePath = Paths.get("uploads/" + fileName);
-            Files.delete(fileToDeletePath);
-            System.out.println(fileName);
+                String fileName = imagePath.substring(lastIndex + 1);
+                Path fileToDeletePath = Paths.get("uploads/" + fileName);
+                Files.delete(fileToDeletePath);
+                System.out.println(fileName);
+            }
+        }catch(IOException e) {
         }
     }
 }

@@ -336,17 +336,18 @@ const EditPlant = () => {
                     />
                   </div>
                   <div className="-m-1">
+                    <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-1">Image</label>
                     <input className="inputFileClass" type="file" name="image" onChange={handleFileChange} />
                   </div>
-                  <div className="flex items-center justify-center gap-5 mt-4">
+                  <div className="flex items-center justify-center gap-5 mt-5">
                     <input
-                      className="text-sm hover:cursor-pointer bg-gray-500 hover:bg-gray-700 text-white  py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                      className="text-sm hover:cursor-pointer bg-gray-500 hover:bg-gray-700 text-white  py-2 px-3 rounded focus:outline-none focus:shadow-outline"
                       type="button"
                       onClick={removeTheFlip}
                       value="Back"
                     />
                     <input
-                      className="text-sm hover:cursor-pointer bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded focus:outline-none focus:shadow-outline"
+                      className="text-sm hover:cursor-pointer bg-blue-500 hover:bg-blue-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline"
                       type="submit"
                       value="Add"
                     />
@@ -408,24 +409,25 @@ const EditPlant = () => {
                         value={instruction}
                       />
                     </div>
-                    <div className="-m-1">
+                    <div className="mx-auto">
+                      <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-1">Image</label>
                       <input className="inputFileClass" type="file" name="image" onChange={handleFileChange} />
                     </div>
-                    <div className="flex items-center justify-center gap-5 mt-4">
+                    <div className="flex items-center justify-center gap-5 mt-5">
                       <input
-                        className="text-sm hover:cursor-pointer bg-gray-500 hover:bg-gray-700 text-white  py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                        className="text-sm hover:cursor-pointer bg-gray-500 hover:bg-gray-700 text-white  py-2 px-3 rounded focus:outline-none focus:shadow-outline"
                         type="button"
                         onClick={removeTheFlip}
                         value="Back"
                       />
                       <input
-                        className="text-sm hover:cursor-pointer bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded focus:outline-none focus:shadow-outline"
+                        className="text-sm hover:cursor-pointer bg-blue-500 hover:bg-blue-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline"
                         type="button"
                         value="Edit"
                         onClick={handleUpdate}
                       />
                       <input
-                        className="text-sm hover:cursor-pointer bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded focus:outline-none focus:shadow-outline"
+                        className="text-sm hover:cursor-pointer bg-red-500 hover:bg-red-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline"
                         type="button"
                         value="Delete"
                         onClick={openConfirmation}
