@@ -39,7 +39,7 @@ const Plant = () => {
 
   return (
     <div className="w-full flex gap-4">
-      <div className="w-1/5">
+      <div className="w-52">
         <img
           className="w-200 h-200 object-contain"
           src={plant?.image}
@@ -50,7 +50,11 @@ const Plant = () => {
         <h2 className="text-2xl font-bold">Plant: {plant !== null && plant.name}</h2>
         <small><em>Added on {plant?.date.toString()}</em></small>
         <hr className="my-4" />
+        <h3 className="text-xl font-bold">Description</h3>
         <p>{plant?.description}</p>
+        <hr className="my-4" />
+        <h3 className="text-xl font-bold">Instruction</h3>
+        <p>{plant?.instruction}</p>
       </div>
     </div>
   );

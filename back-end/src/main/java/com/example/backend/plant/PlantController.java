@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/plants")
+//@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class PlantController {
 
     private final PlantService plantService;
@@ -40,7 +41,9 @@ public class PlantController {
                                       @RequestParam("instruction") String instruction,
                                       @RequestParam("image") MultipartFile imageFile,
                                       @RequestParam("date") LocalDate date ) {
-
+        if (imageFile.getSize() >= 5242880){ // over 5MB
+            return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("Image to large (5MB limit)");
+        }
         String filename = imageService.saveUploadedImg(imageFile);
 
         if (filename != "Error"){

@@ -1,14 +1,18 @@
 package com.example.backend.user;
 
+import com.example.backend.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-
+    public static Map<String, Session> sessions = new HashMap<>();
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;

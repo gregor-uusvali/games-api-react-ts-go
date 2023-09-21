@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles/tailwind.css'; // Import Tailwind CSS
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { OutletContext } from './context/OutletContext';
@@ -18,6 +18,39 @@ function App() {
     setJwtToken("")
     navigate("/login")
   }
+
+  const isLoggedIn = () => {
+    const cookies = document.cookie.split(";");
+    for (const cookie of cookies) {
+      if (cookie){
+        console.log(cookie)
+
+      }else {
+        console.log("no cookies")
+      }
+      // const [name, value] = cookie.split("=");
+      // if (name === "SN-Session" && value) {
+      //   fetch("http://localhost:8080/profile/0", {
+      //     method: "GET",
+      //     credentials: "include",
+      //   })
+      //     .then((response) => response.json())
+      //     .then((data) => {
+      //       setUserId(data.id);
+      //       setLoggedIn(true);
+      //     })
+      //     .catch((error) => {
+      //       console.log(error);
+      //     });
+      // } else {
+      //   setLoggedIn(false);
+      // }
+    }
+  }
+
+  useEffect(() => {
+    isLoggedIn()
+  },[])
 
   return (
     <OutletContext.Provider value={{

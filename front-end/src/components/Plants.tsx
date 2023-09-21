@@ -64,7 +64,7 @@ const Plants = () => {
                                             {m.date.toString()}
                                         </td>
                                         <td className="px-6 py-4">
-                                            <img className="w-20 h-20 mx-auto" src={m.image} alt="plant image" />
+                                            <img className=" h-20 mx-auto object-contain" src={m.image} alt="plant image" />
                                         </td>
                                     </tr>
                                 ))}

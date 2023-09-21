@@ -360,7 +360,7 @@ const EditPlant = () => {
             <div key={m.id} onClick={(e) => doTheFlip(e, m.id)} className="flip-card w-96">
               <div className="flip-card-inner">
                 <div className="flip-card-front card h-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-700">
-                  <img className="h-4/5 w-full rounded-t-lg" src={m.image} alt="plant-image" />
+                  <img className="h-4/5 w-full rounded-t-lg object-cover" src={m.image} alt="plant-image" />
                   <div className="px-5 py-2">
                     <h5 className="mb-1 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{m.name}</h5>
                   </div>
