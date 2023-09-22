@@ -44,6 +44,7 @@ const Login = () => {
         .then(async (response) => {
           if (response.ok) {
             const data = await response.json();
+            console.log(data)
             const userID: number = parseInt(data.userId)
             setCurrentUserId(userID)
             setJwtToken("abc")

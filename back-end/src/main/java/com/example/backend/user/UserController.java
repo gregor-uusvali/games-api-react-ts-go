@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -32,7 +33,6 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> logUserIn(@RequestBody Map<String, String> requestBody, @CookieValue(name = "session_token", required = false) String sessionTokenCookie,
                                        HttpServletResponse response) throws IOException {
-//        System.out.println("Request Body: " + requestBody);
         User user = userService.findByEmail(requestBody.get("email"));
         if (user == null) {
             // User does not exist
@@ -43,19 +43,25 @@ public class UserController {
         if (!userService.isPasswordMatch(requestBody.get("password"), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
         }
-        if (StringUtils.isEmpty(sessionTokenCookie)) {
+
+        String sessionToken;
+        if (!StringUtils.hasText(sessionTokenCookie)) {
             // Generate a new session UUID
-            String sessionToken = UUID.randomUUID().toString();
-            createCookie(response, user, sessionToken);
+            sessionToken = UUID.randomUUID().toString();
+            Cookie sessionCookie = createCookie(user, sessionToken);
             System.out.println("Created session cookie for user: " + user.getEmail());
             sessionService.saveSession(user, sessionToken); // Save the session with the generated UUID
+            response.addCookie(sessionCookie); // Add the session cookie to the response
         } else {
-            sessionService.saveSession(user, sessionTokenCookie); // Save the session with the existing UUID
+            sessionToken = sessionTokenCookie;
+            sessionService.saveSession(user, sessionToken); // Save the session with the existing UUID
         }
 
-        String message = "Login successful";
-        return ResponseEntity.ok().body("{\"userId\": \"" + user.getId() + "\"}");
-
+        // Create a JSON response that includes the session token
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("userId", user.getId());
+        responseBody.put("sessionToken", sessionToken);
+        return ResponseEntity.ok(responseBody);
     }
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
@@ -69,7 +75,7 @@ public class UserController {
         return ResponseEntity.ok(savedUser);
     }
 
-    private void createCookie(HttpServletResponse response, User user, String sessionToken) throws IOException {
+    private Cookie createCookie(User user, String sessionToken) throws IOException {
 
 
         Session session = new Session();
@@ -79,9 +85,11 @@ public class UserController {
         sessions.put(sessionToken.toString(), session);
 
         Cookie sessionCookie = new Cookie("session_token", sessionToken.toString());
+        sessionCookie.setSecure(true);
         sessionCookie.setPath("/");
         sessionCookie.setMaxAge(2 * 60 * 60); // 2 hours in seconds
-        response.addCookie(sessionCookie);
+        return sessionCookie;
+
     }
 
     private String getSessionInfo(Map<String, Session> sessions) {
