@@ -1,8 +1,12 @@
 import React from 'react';
 
 interface OutletContextType {
+    isAuthenticated: boolean;
+    setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
     jwtToken: string;
     setJwtToken: React.Dispatch<React.SetStateAction<string>>;
+    sessionToken: string;
+    setSessionToken: React.Dispatch<React.SetStateAction<string>>;
     alertClassName: string;
     setAlertClassName: React.Dispatch<React.SetStateAction<string>>;
     alertMessage: string;

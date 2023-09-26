@@ -92,20 +92,30 @@ public class UserController {
 
     }
 
-    private String getSessionInfo(Map<String, Session> sessions) {
-        StringBuilder info = new StringBuilder("{");
-        for (Map.Entry<String, Session> entry : sessions.entrySet()) {
-            Session session = entry.getValue();
-            User user = session.getUser();
-            info.append(entry.getKey()).append(": ")
-                    .append("email=").append(user.getEmail())
-                    .append(", lastSeen=").append(session.getLastSeen())
-                    .append(" | ");
-        }
-        if (!sessions.isEmpty()) {
-            info.setLength(info.length() - 3); // Remove the last " | "
-        }
-        info.append("}");
-        return info.toString();
+    // @GetMapping("/profile/0")
+    // private User getUserInfo(@RequestBody String requestBody) {
+    // //     StringBuilder info = new StringBuilder("{");
+    // //     for (Map.Entry<String, Session> entry : sessions.entrySet()) {
+    // //         Session session = entry.getValue();
+    // //         User user = session.getUser();
+    // //         info.append(entry.getKey()).append(": ")
+    // //                 .append("email=").append(user.getEmail())
+    // //                 .append(", lastSeen=").append(session.getLastSeen())
+    // //                 .append(" | ");
+    // //     }
+    // //     if (!sessions.isEmpty()) {
+    // //         info.setLength(info.length() - 3); // Remove the last " | "
+    // //     }
+    // //     info.append("}");
+    // //     return info.toString();
+    // // }
+    //     return userService.findBySessionToken(requestBody);
+    // }
+    @GetMapping("/profile/0")
+    private User getUserInfo(@RequestParam(name = "sessionToken") String sessionToken) {
+    // Use 'userId' to identify the user, and 'cookieParam' if needed
+    System.out.println(userService.findBySessionToken(sessionToken));
+
+    return userService.findBySessionToken(sessionToken);
     }
 }

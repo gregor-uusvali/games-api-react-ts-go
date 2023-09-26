@@ -2,6 +2,8 @@ package com.example.backend.user;
 
 import com.example.backend.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ public class UserService {
     }
 
     public User findByEmail(String email) { return userRepository.findByEmail(email); }
+
+    public User findBySessionToken(String token){ return userRepository.findBySessionToken(token);}
 
     public boolean isPasswordMatch(String password, String hashedPW) {
         return new BCryptPasswordEncoder().matches(password, hashedPW);

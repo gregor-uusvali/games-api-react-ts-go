@@ -3,6 +3,7 @@ import Input from "./form/Input";
 // import { useOutlet, useOutletContext } from "react-router-dom";
 import { useOutletContext } from '../context/OutletContext'; // Import the useOutletContext from your OutletContext file
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 
 const Login = () => {
@@ -10,7 +11,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const { setCurrentUserId } = useOutletContext();
-  const { setJwtToken } = useOutletContext();
+  const { setIsAuthenticated } = useOutletContext();
+  const { setSessionToken } = useOutletContext();
   const { setAlertClassName } = useOutletContext();
   const { setAlertMessage } = useOutletContext();
   const { setAlertType } = useOutletContext();
@@ -45,9 +47,12 @@ const Login = () => {
           if (response.ok) {
             const data = await response.json();
             console.log(data)
+            Cookies.set("session_token", data.sessionToken)
             const userID: number = parseInt(data.userId)
             setCurrentUserId(userID)
-            setJwtToken("abc")
+            setSessionToken(data.sessionToken)
+            setIsAuthenticated(true)
+            
             navigate("/");
           } else {
             const errorText = await response.text();
