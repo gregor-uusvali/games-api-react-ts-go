@@ -11,11 +11,15 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const { setCurrentUserId } = useOutletContext();
+  const { setFirstName } = useOutletContext();
+  const { setLastName } = useOutletContext();
   const { setIsAuthenticated } = useOutletContext();
   const { setSessionToken } = useOutletContext();
   const { setAlertClassName } = useOutletContext();
   const { setAlertMessage } = useOutletContext();
   const { setAlertType } = useOutletContext();
+  const { setLastWatered } = useOutletContext();
+  const { setDaysToWater } = useOutletContext();
 
   const navigate = useNavigate()
 
@@ -52,7 +56,10 @@ const Login = () => {
             setCurrentUserId(userID)
             setSessionToken(data.sessionToken)
             setIsAuthenticated(true)
-            
+            setFirstName(data.firstName)
+            setLastName(data.lastName)
+            setLastWatered(data.lastWatered)
+            setDaysToWater(data.daysToWater)
             navigate("/");
           } else {
             const errorText = await response.text();

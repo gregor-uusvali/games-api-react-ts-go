@@ -3,6 +3,8 @@ import Input from "./form/Input";
 import { useOutletContext } from '../context/OutletContext';
 import { PlantType } from "./Plants";
 import ConfirmationModal from "./modal/ConfirmationModal";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const EditPlant = () => {
   const [plantId, setPlantId] = useState(0);
@@ -14,10 +16,13 @@ const EditPlant = () => {
   const [clicked, setClicked] = useState(false);
   const [isConfirmationOpen, setConfirmationOpen] = useState(false);
   const [activeCardId, setActiveDardId] = useState<number | null>(null)
+  const [hasCookie, setHasCookie] = useState(false)
 
   const { setAlertClassName } = useOutletContext();
   const { setAlertMessage } = useOutletContext();
   const { setAlertType } = useOutletContext();
+
+  const navigate = useNavigate()
 
   const setInitialVals = (plantId: number) => {
     for (let i = 0; i < plants.length; i++) {
@@ -274,111 +279,42 @@ const EditPlant = () => {
   };
 
   useEffect(() => {
-    getPlants()
-    if (plants.length > 0) {
+    const cookie = Cookies.get("session_token")
+    if (cookie === undefined) {
+      navigate("/")
+    } else {
+      setHasCookie(true)
+      getPlants()
     }
   }, [])
 
 
   return (
-    <div className="w-full mx-4">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold">Add/Edit Plants</h2>
-        <hr className="my-4" />
-        {/* cards here */}
-        <div className="flex flex-wrap gap-4">
-          <div onClick={(e) => doTheFlip(e)} className="flip-card w-96">
-            <div className="flip-card-inner">
-              <div className="flip-card-front card h-full bg-white border border-gray-200 rounded-lg shadow dark:border-gray-700 flex items-center justify-center transition duration-300 hover:bg-gray-700">
-                <svg className="svg-icon w-20 h-20 text-gray-700 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="11" stroke="currentColor" strokeWidth="1" fill="none" />
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M12 7v10M7 12h10" />
-                </svg>
-              </div>
-              <div className="flip-card-back">
-                <form onSubmit={handleAdd} className="mx-auto">
-                  <div className="mt-2">
-                    <Input
-                      name="name"
-                      type="text"
-                      title="Name"
-                      className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      onChange={(event: { target: { value: any; }; }) => setName(event.target.value)}
-                      autoComplete="name-new" placeholder="" value={name} errorDiv={""} errorMsg={""}
-                    />
-                  </div>
-                  <div className="mx-8">
-                    <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-1">Description</label>
-                    <textarea
-                      name="description"
-                      title="Description"
-                      id="message"
-                      rows={3}
-                      className="block p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg shadow appearance-none mb-3"
-                      onChange={(event) => setDescription(event.target.value)}
-                      autoComplete="description-new"
-                      placeholder={""}
-                      value={description}
-                    />
-                  </div>
-                  <div className="mx-8">
-                    <label htmlFor="instruction" className="block text-gray-700 text-sm font-bold mb-1">Instruction</label>
-                    <textarea
-                      name="instruction"
-                      title="Instruction"
-                      id="message"
-                      rows={3}
-                      className="block p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg shadow appearance-none mb-3"
-                      onChange={(event) => setInstruction(event.target.value)}
-                      autoComplete="instruction-new"
-                      placeholder={""}
-                      value={instruction}
-                    />
-                  </div>
-                  <div className="-m-1">
-                    <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-1">Image</label>
-                    <input className="inputFileClass" type="file" name="image" onChange={handleFileChange} />
-                  </div>
-                  <div className="flex items-center justify-center gap-5 mt-5">
-                    <input
-                      className="text-sm hover:cursor-pointer bg-gray-500 hover:bg-gray-700 text-white  py-2 px-3 rounded focus:outline-none focus:shadow-outline"
-                      type="button"
-                      onClick={removeTheFlip}
-                      value="Back"
-                    />
-                    <input
-                      className="text-sm hover:cursor-pointer bg-blue-500 hover:bg-blue-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline"
-                      type="submit"
-                      value="Add"
-                    />
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          {plants.map((m) => (
-            <div key={m.id} onClick={(e) => doTheFlip(e, m.id)} className="flip-card w-96">
+    <>
+      {hasCookie && <div className="w-full mx-auto">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold">Add/Edit Plants</h2>
+          <hr className="my-4" />
+          {/* cards here */}
+          <div className="flex flex-wrap gap-4 mx-4">
+            <div onClick={(e) => doTheFlip(e)} className="flip-card w-96">
               <div className="flip-card-inner">
-                <div className="flip-card-front card h-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-700">
-                  <img className="h-4/5 w-full rounded-t-lg object-cover" src={m.image} alt="plant-image" />
-                  <div className="px-5 py-2">
-                    <h5 className="mb-1 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{m.name}</h5>
-                  </div>
+                <div className="flip-card-front card h-full bg-white border border-gray-200 rounded-lg shadow dark:border-gray-700 flex items-center justify-center transition duration-300 hover:bg-gray-700">
+                  <svg className="svg-icon w-20 h-20 text-gray-700 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="11" stroke="currentColor" strokeWidth="1" fill="none" />
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M12 7v10M7 12h10" />
+                  </svg>
                 </div>
                 <div className="flip-card-back">
-                  <form onSubmit={handleUpdate} className="mx-auto">
+                  <form onSubmit={handleAdd} className="mx-auto">
                     <div className="mt-2">
                       <Input
                         name="name"
                         type="text"
                         title="Name"
-                        className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline focus:shadow-outline"
+                        className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         onChange={(event: { target: { value: any; }; }) => setName(event.target.value)}
-                        autoComplete="name-new"
-                        placeholder=""
-                        value={name}
-                        errorDiv={""}
-                        errorMsg={""}
+                        autoComplete="name-new" placeholder="" value={name} errorDiv={""} errorMsg={""}
                       />
                     </div>
                     <div className="mx-8">
@@ -409,11 +345,11 @@ const EditPlant = () => {
                         value={instruction}
                       />
                     </div>
-                    <div className="mx-auto">
+                    <div className="-m-1">
                       <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-1">Image</label>
                       <input className="inputFileClass" type="file" name="image" onChange={handleFileChange} />
                     </div>
-                    <div className="flex items-center justify-center gap-5 mt-3">
+                    <div className="flex items-center justify-center gap-5 mt-5">
                       <input
                         className="text-sm hover:cursor-pointer bg-gray-500 hover:bg-gray-700 text-white  py-2 px-3 rounded focus:outline-none focus:shadow-outline"
                         type="button"
@@ -422,33 +358,109 @@ const EditPlant = () => {
                       />
                       <input
                         className="text-sm hover:cursor-pointer bg-blue-500 hover:bg-blue-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline"
-                        type="button"
-                        value="Edit"
-                        onClick={handleUpdate}
+                        type="submit"
+                        value="Add"
                       />
-                      <input
-                        className="text-sm hover:cursor-pointer bg-red-500 hover:bg-red-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline"
-                        type="button"
-                        value="Delete"
-                        onClick={openConfirmation}
-                      />
-                    </div>
-                    <div>
-                      <ConfirmationModal
-                        isOpen={isConfirmationOpen}
-                        onConfirm={(e: any) => handleConfirm(e)}
-                        onCancel={handleConfirmCancel}
-                      />
-
                     </div>
                   </form>
                 </div>
               </div>
             </div>
-          ))}
+            {plants.map((m) => (
+              <div key={m.id} onClick={(e) => doTheFlip(e, m.id)} className="flip-card w-96">
+                <div className="flip-card-inner">
+                  <div className="flip-card-front card h-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-700">
+                    <img className="h-4/5 w-full rounded-t-lg object-cover" src={m.image} alt="plant-image" />
+                    <div className="px-5 py-2">
+                      <h5 className="mb-1 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{m.name}</h5>
+                    </div>
+                  </div>
+                  <div className="flip-card-back">
+                    <form onSubmit={handleUpdate} className="mx-auto">
+                      <div className="mt-2">
+                        <Input
+                          name="name"
+                          type="text"
+                          title="Name"
+                          className="w-4/5 shadow appearance-none border rounded py-1 px-1 text-gray-700 leading-tight focus:outline focus:shadow-outline"
+                          onChange={(event: { target: { value: any; }; }) => setName(event.target.value)}
+                          autoComplete="name-new"
+                          placeholder=""
+                          value={name}
+                          errorDiv={""}
+                          errorMsg={""}
+                        />
+                      </div>
+                      <div className="mx-8">
+                        <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-1">Description</label>
+                        <textarea
+                          name="description"
+                          title="Description"
+                          id="message"
+                          rows={3}
+                          className="block p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg shadow appearance-none mb-3"
+                          onChange={(event) => setDescription(event.target.value)}
+                          autoComplete="description-new"
+                          placeholder={""}
+                          value={description}
+                        />
+                      </div>
+                      <div className="mx-8">
+                        <label htmlFor="instruction" className="block text-gray-700 text-sm font-bold mb-1">Instruction</label>
+                        <textarea
+                          name="instruction"
+                          title="Instruction"
+                          id="message"
+                          rows={3}
+                          className="block p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg shadow appearance-none mb-3"
+                          onChange={(event) => setInstruction(event.target.value)}
+                          autoComplete="instruction-new"
+                          placeholder={""}
+                          value={instruction}
+                        />
+                      </div>
+                      <div className="mx-auto">
+                        <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-1">Image</label>
+                        <input className="inputFileClass" type="file" name="image" onChange={handleFileChange} />
+                      </div>
+                      <div className="flex items-center justify-center gap-5 mt-3">
+                        <input
+                          className="text-sm hover:cursor-pointer bg-gray-500 hover:bg-gray-700 text-white  py-2 px-3 rounded focus:outline-none focus:shadow-outline"
+                          type="button"
+                          onClick={removeTheFlip}
+                          value="Back"
+                        />
+                        <input
+                          className="text-sm hover:cursor-pointer bg-blue-500 hover:bg-blue-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline"
+                          type="button"
+                          value="Edit"
+                          onClick={handleUpdate}
+                        />
+                        <input
+                          className="text-sm hover:cursor-pointer bg-red-500 hover:bg-red-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline"
+                          type="button"
+                          value="Delete"
+                          onClick={openConfirmation}
+                        />
+                      </div>
+                      <div>
+                        <ConfirmationModal
+                          isOpen={isConfirmationOpen}
+                          onConfirm={(e: any) => handleConfirm(e)}
+                          onCancel={handleConfirmCancel}
+                        />
+
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+      }
+    </>
   );
 };
 

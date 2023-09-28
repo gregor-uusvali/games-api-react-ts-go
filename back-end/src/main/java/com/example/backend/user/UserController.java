@@ -1,5 +1,6 @@
 package com.example.backend.user;
 
+import com.example.backend.plant.Plant;
 import com.example.backend.session.Session;
 import com.example.backend.session.SessionService;
 import jakarta.servlet.http.Cookie;
@@ -23,7 +24,7 @@ import static com.example.backend.user.UserService.sessions;
 public class UserController {
     private final UserService userService;
 
-     private final SessionService sessionService;
+    private final SessionService sessionService;
 
     public UserController(UserService userService, SessionService sessionService) {
         this.userService = userService;
@@ -61,8 +62,11 @@ public class UserController {
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("userId", user.getId());
         responseBody.put("sessionToken", sessionToken);
+        responseBody.put("firstName", user.getFirstName());
+        responseBody.put("lastName", user.getLastName());
         return ResponseEntity.ok(responseBody);
     }
+
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         // Check if the email is already taken
@@ -92,30 +96,17 @@ public class UserController {
 
     }
 
-    // @GetMapping("/profile/0")
-    // private User getUserInfo(@RequestBody String requestBody) {
-    // //     StringBuilder info = new StringBuilder("{");
-    // //     for (Map.Entry<String, Session> entry : sessions.entrySet()) {
-    // //         Session session = entry.getValue();
-    // //         User user = session.getUser();
-    // //         info.append(entry.getKey()).append(": ")
-    // //                 .append("email=").append(user.getEmail())
-    // //                 .append(", lastSeen=").append(session.getLastSeen())
-    // //                 .append(" | ");
-    // //     }
-    // //     if (!sessions.isEmpty()) {
-    // //         info.setLength(info.length() - 3); // Remove the last " | "
-    // //     }
-    // //     info.append("}");
-    // //     return info.toString();
-    // // }
-    //     return userService.findBySessionToken(requestBody);
-    // }
     @GetMapping("/profile/0")
     private User getUserInfo(@RequestParam(name = "sessionToken") String sessionToken) {
-    // Use 'userId' to identify the user, and 'cookieParam' if needed
-    System.out.println(userService.findBySessionToken(sessionToken));
+        // Use 'userId' to identify the user, and 'cookieParam' if needed
+        System.out.println(userService.findBySessionToken(sessionToken));
 
-    return userService.findBySessionToken(sessionToken);
+        return userService.findBySessionToken(sessionToken);
+    }
+
+    @DeleteMapping("/logout")
+    private ResponseEntity<?> logout(@RequestBody String token) {
+        sessionService.deleteSessionBySessionUuid(token);
+        return ResponseEntity.ok("Session deleted");
     }
 }

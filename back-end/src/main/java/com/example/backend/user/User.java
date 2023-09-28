@@ -2,6 +2,8 @@ package com.example.backend.user;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -20,18 +22,24 @@ public class User {
     private String firstName;
     private String lastName;
     private String password;
+    private LocalDateTime lastWatered;
+    private int daysToWater;
 
     public User(
             int id,
             String email,
             String password,
             String firstName,
-            String lastName) {
+            String lastName,
+            LocalDateTime lastWatered,
+            int daysToWater) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.lastWatered = lastWatered;
+        this.daysToWater = daysToWater;
     }
 
     public User() {
@@ -77,6 +85,18 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+    public LocalDateTime getLastWatered() {
+        return lastWatered;
+    }
+    public void setLastWatered(LocalDateTime lastWatered) {
+        this.lastWatered = lastWatered;
+    }
+    public int getDaysToWater() {
+        return daysToWater;
+    }
+    public void setDaysToWater(int daysToWater) {
+        this.daysToWater = daysToWater;
+    }
     @Override
     public String toString() {
         return "User{" +
@@ -85,6 +105,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", lastWatered='" + lastWatered + '\'' +
+                ", daysToWater='" + daysToWater + '\'' +
                 '}';
     }
 }

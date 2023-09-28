@@ -15,8 +15,19 @@ interface OutletContextType {
     setAlertType: React.Dispatch<React.SetStateAction<string>>;
     currentUserId: number; // Add currentUserId to the context
     setCurrentUserId: React.Dispatch<React.SetStateAction<number>>; // Add setCurrentUserId to the context
+    firstName: string;
+    setFirstName: React.Dispatch<React.SetStateAction<string>>;
+    lastName: string;
+    setLastName: React.Dispatch<React.SetStateAction<string>>;
+    lastWatered: Date;
+    setLastWatered: React.Dispatch<React.SetStateAction<Date>>;
+    daysToWater: number;
+    setDaysToWater: React.Dispatch<React.SetStateAction<number>>;
+    nextDateToWater: Date;
+    setNextDateToWater: React.Dispatch<React.SetStateAction<Date>>;
+    daysLeftToWater: number;
+    setDaysLeftToWater: React.Dispatch<React.SetStateAction<number>>;
 }
-
 export const OutletContext = React.createContext<OutletContextType | undefined>(undefined);
 
 export const useOutletContext = () => {

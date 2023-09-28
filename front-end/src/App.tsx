@@ -13,14 +13,33 @@ function App() {
   const [alertType, setAlertType] = useState("")
   const [currentUserId, setCurrentUserId] = useState<number>(0); // Initialize with your initial value
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [lastWatered, setLastWatered] = useState<Date>(new Date)
+  const [daysToWater, setDaysToWater] = useState<number>(0)
+  const [nextDateToWater, setNextDateToWater] = useState<Date>(new Date)
+  const [daysLeftToWater, setDaysLeftToWater] = useState<number>(0)
 
   const navigate = useNavigate()
 
 
   const logOut = () => {
     setJwtToken("")
-    setSessionToken("")
+    setFirstName("")
+    setLastName("")
+    setIsAuthenticated(false)
     Cookies.remove("session_token");
+    fetch('http://localhost:8080/api/v1/logout', {
+      method: "DELETE",
+      body: sessionToken
+    })
+      .then(response =>
+        console.log(response)
+      )
+      .catch(error => {
+        console.log(error)
+      })
+    setSessionToken("")
     navigate("/login")
   }
 
@@ -37,20 +56,28 @@ function App() {
         method: "GET",
         credentials: "include"
       })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
+        .then(async (response) => {
+          if (response.ok) {
+            const data = await response.json();
+            setFirstName(data.firstName)
+            setLastName(data.lastName)
+            setDaysToWater(data.daysToWater)
+            const newLastWateredDate = new Date(data.lastWatered)
+            setLastWatered(newLastWateredDate)
+            const newNextWateredDate = new Date(data.lastWatered)
+            newNextWateredDate.setDate(newLastWateredDate.getDate() + data.daysToWater)
+            setNextDateToWater(newNextWateredDate)
+            let days = (newNextWateredDate.getTime() - (new Date).getTime())/(1000*60*60*24)
+            setDaysLeftToWater(days)
+          }
         })
         .catch((error) => {
           console.log(error);
         });
-    } else {
-      console.log("no cookies")
     }
   }
 
   useEffect(() => {
-
     isLoggedIn()
   }, [])
 
@@ -70,6 +97,18 @@ function App() {
       setAlertType,
       currentUserId,
       setCurrentUserId,
+      firstName,
+      setFirstName,
+      lastName,
+      setLastName,
+      lastWatered,
+      setLastWatered,
+      daysToWater,
+      setDaysToWater,
+      nextDateToWater,
+      setNextDateToWater,
+      daysLeftToWater,
+      setDaysLeftToWater
     }}>
       <div className="container mx-auto">
         <div className="flex justify-between mt-3 mb-3">
@@ -82,7 +121,11 @@ function App() {
               ? <Link to="/login">
                 <span className="bg-green-500 text-white py-1 px-3 rounded-full">Login</span>
               </Link>
-              : <a href="#!" onClick={logOut}><span className="bg-red-500 text-white py-1 px-3 rounded-full">Logout</span></a>
+              : <>
+                <p className='mr-4'>Hello {firstName} {lastName}!</p>
+                <a href="#!" onClick={logOut}><span className="bg-red-500 text-white py-1 px-3 rounded-full">Logout</span></a>
+
+              </>
             }
           </div>
         </div>
@@ -96,7 +139,7 @@ function App() {
                 <Link to="/family" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Family</Link>
                 {sessionToken !== "" &&
                   <>
-                    <Link to="/admin/plant/0" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Add/Edit Plants</Link>
+                    <Link to="/admin/plants" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Add/Edit Plants</Link>
                     <Link to="/manage-plants" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Manage Plants</Link>
                     <Link to="/graphql" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">GraphQL</Link>
                   </>

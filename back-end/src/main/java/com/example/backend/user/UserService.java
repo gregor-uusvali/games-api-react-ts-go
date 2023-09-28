@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +28,12 @@ public class UserService {
 
     public User findByEmail(String email) { return userRepository.findByEmail(email); }
 
-    public User findBySessionToken(String token){ return userRepository.findBySessionToken(token);}
+    public User findBySessionToken(String token){
+        User user = userRepository.findBySessionToken(token);
+        user.setPassword("");
+        user.setEmail("");
+        return user;
+    }
 
     public boolean isPasswordMatch(String password, String hashedPW) {
         return new BCryptPasswordEncoder().matches(password, hashedPW);
@@ -36,7 +42,11 @@ public class UserService {
     public User saveUser(User user) {
         String hashedPW = new BCryptPasswordEncoder().encode(user.getPassword());
         user.setPassword(hashedPW);
+        user.setLastWatered(LocalDateTime.now());
+        user.setDaysToWater(10);
         return userRepository.save(user);
 
     }
+
+
 }

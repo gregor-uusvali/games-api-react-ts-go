@@ -33,7 +33,7 @@ const router = createBrowserRouter([
         element: <Family />,
       },
       {
-        path: "/admin/plant/0",
+        path: "/admin/plants",
         element: <EditPlant />,
       },
       {
