@@ -19,14 +19,14 @@ interface OutletContextType {
     setFirstName: React.Dispatch<React.SetStateAction<string>>;
     lastName: string;
     setLastName: React.Dispatch<React.SetStateAction<string>>;
-    lastWatered: Date;
-    setLastWatered: React.Dispatch<React.SetStateAction<Date>>;
-    daysToWater: number;
-    setDaysToWater: React.Dispatch<React.SetStateAction<number>>;
-    nextDateToWater: Date;
-    setNextDateToWater: React.Dispatch<React.SetStateAction<Date>>;
-    daysLeftToWater: number;
-    setDaysLeftToWater: React.Dispatch<React.SetStateAction<number>>;
+    // lastWatered: Date;
+    // setLastWatered: React.Dispatch<React.SetStateAction<Date>>;
+    // daysToWater: number;
+    // setDaysToWater: React.Dispatch<React.SetStateAction<number>>;
+    // nextDateToWater: Date;
+    // setNextDateToWater: React.Dispatch<React.SetStateAction<Date>>;
+    // daysLeftToWater: number;
+    // setDaysLeftToWater: React.Dispatch<React.SetStateAction<number>>;
 }
 export const OutletContext = React.createContext<OutletContextType | undefined>(undefined);
 

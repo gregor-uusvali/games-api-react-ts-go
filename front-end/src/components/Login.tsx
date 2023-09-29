@@ -18,8 +18,8 @@ const Login = () => {
   const { setAlertClassName } = useOutletContext();
   const { setAlertMessage } = useOutletContext();
   const { setAlertType } = useOutletContext();
-  const { setLastWatered } = useOutletContext();
-  const { setDaysToWater } = useOutletContext();
+  // const { setLastWatered } = useOutletContext();
+  // const { setDaysToWater } = useOutletContext();
 
   const navigate = useNavigate()
 
@@ -50,7 +50,7 @@ const Login = () => {
         .then(async (response) => {
           if (response.ok) {
             const data = await response.json();
-            console.log(data)
+            // console.log(data)
             Cookies.set("session_token", data.sessionToken)
             const userID: number = parseInt(data.userId)
             setCurrentUserId(userID)
@@ -58,8 +58,8 @@ const Login = () => {
             setIsAuthenticated(true)
             setFirstName(data.firstName)
             setLastName(data.lastName)
-            setLastWatered(data.lastWatered)
-            setDaysToWater(data.daysToWater)
+            // setLastWatered(data.lastWatered)
+            // setDaysToWater(data.daysToWater)
             navigate("/");
           } else {
             const errorText = await response.text();

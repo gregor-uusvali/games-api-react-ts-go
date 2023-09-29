@@ -109,4 +109,10 @@ public class UserController {
         sessionService.deleteSessionBySessionUuid(token);
         return ResponseEntity.ok("Session deleted");
     }
+
+    @PutMapping("/updateWatered/{id}")
+    private ResponseEntity updateUserLastWatered(@PathVariable int id) throws IOException {
+        LocalDateTime newWateredDate = userService.updateUserWatered(id);
+        return ResponseEntity.ok(newWateredDate);
+    }
 }

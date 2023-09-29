@@ -15,10 +15,10 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
-  const [lastWatered, setLastWatered] = useState<Date>(new Date)
-  const [daysToWater, setDaysToWater] = useState<number>(0)
-  const [nextDateToWater, setNextDateToWater] = useState<Date>(new Date)
-  const [daysLeftToWater, setDaysLeftToWater] = useState<number>(0)
+  // const [lastWatered, setLastWatered] = useState<Date>(new Date)
+  // const [daysToWater, setDaysToWater] = useState<number>(0)
+  // const [nextDateToWater, setNextDateToWater] = useState<Date>(new Date)
+  // const [daysLeftToWater, setDaysLeftToWater] = useState<number>(0)
 
   const navigate = useNavigate()
 
@@ -33,18 +33,41 @@ function App() {
       method: "DELETE",
       body: sessionToken
     })
-      .then(response =>
-        console.log(response)
-      )
-      .catch(error => {
-        console.log(error)
-      })
+    // .then(response =>
+    //   console.log(response)
+    // )
+    // .catch(error => {
+    //   console.log(error)
+    // })
     setSessionToken("")
     navigate("/login")
   }
 
-  const fetchUserByCookie = () => {
-
+  const fetchUserByCookie = (cookie: string) => {
+    fetch(`http://localhost:8080/api/v1/profile/0?sessionToken=${cookie}`, {
+      method: "GET",
+      credentials: "include"
+    })
+      .then(async (response) => {
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data)
+          setCurrentUserId(data.id)
+          setFirstName(data.firstName)
+          setLastName(data.lastName)
+          // setDaysToWater(data.daysToWater)
+          // const newLastWateredDate = new Date(data.lastWatered)
+          // setLastWatered(newLastWateredDate)
+          // const newNextWateredDate = new Date(data.lastWatered)
+          // newNextWateredDate.setDate(newLastWateredDate.getDate() + data.daysToWater)
+          // setNextDateToWater(newNextWateredDate)
+          // let days = (newNextWateredDate.getTime() - (new Date).getTime()) / (1000 * 60 * 60 * 24)
+          // setDaysLeftToWater(days)
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   const isLoggedIn = () => {
@@ -52,32 +75,13 @@ function App() {
     if (cookie) {
       setSessionToken(cookie)
       setIsAuthenticated(true)
-      fetch(`http://localhost:8080/api/v1/profile/0?sessionToken=${cookie}`, {
-        method: "GET",
-        credentials: "include"
-      })
-        .then(async (response) => {
-          if (response.ok) {
-            const data = await response.json();
-            setFirstName(data.firstName)
-            setLastName(data.lastName)
-            setDaysToWater(data.daysToWater)
-            const newLastWateredDate = new Date(data.lastWatered)
-            setLastWatered(newLastWateredDate)
-            const newNextWateredDate = new Date(data.lastWatered)
-            newNextWateredDate.setDate(newLastWateredDate.getDate() + data.daysToWater)
-            setNextDateToWater(newNextWateredDate)
-            let days = (newNextWateredDate.getTime() - (new Date).getTime())/(1000*60*60*24)
-            setDaysLeftToWater(days)
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+
+      fetchUserByCookie(cookie)
     }
   }
 
   useEffect(() => {
+
     isLoggedIn()
   }, [])
 
@@ -101,14 +105,14 @@ function App() {
       setFirstName,
       lastName,
       setLastName,
-      lastWatered,
-      setLastWatered,
-      daysToWater,
-      setDaysToWater,
-      nextDateToWater,
-      setNextDateToWater,
-      daysLeftToWater,
-      setDaysLeftToWater
+      // lastWatered,
+      // setLastWatered,
+      // daysToWater,
+      // setDaysToWater,
+      // nextDateToWater,
+      // setNextDateToWater,
+      // daysLeftToWater,
+      // setDaysLeftToWater
     }}>
       <div className="container mx-auto">
         <div className="flex justify-between mt-3 mb-3">
@@ -151,6 +155,7 @@ function App() {
             <Alert type={alertType} message={alertMessage} className={alertClassName} />
             <div className="mx-auto w-full flex justify-center">
               <Outlet />
+              {/* {lastWatered !== undefined ? <Outlet /> : <div>Loading...</div>} */}
             </div>
           </div>
         </div>
