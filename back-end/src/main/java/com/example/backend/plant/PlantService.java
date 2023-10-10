@@ -23,8 +23,8 @@ public class PlantService {
         return plantRepository.findAll();
     }
 
-    public List<Plant> getPlantsByUserId(int userId) {
-        return plantRepository.getPlantsByUserId(userId);
+    public List<Plant> getPlantsBySessionToken(String token) {
+        return plantRepository.getPlantsBySessionToken(token);
     }
 
 

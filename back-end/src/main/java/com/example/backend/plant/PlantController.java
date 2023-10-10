@@ -32,9 +32,9 @@ public class PlantController {
         return plantService.getPlants();
     }
 
-    @GetMapping(path = "/user/{id}")
-    public List<Plant> getPlantsByUserId(@PathVariable String id) {
-        return plantService.getPlantsByUserId(Integer.parseInt(id));
+    @GetMapping(path = "/user/{token}")
+    public List<Plant> getPlantsBySessionToken(@PathVariable String token) {
+        return plantService.getPlantsBySessionToken(token);
     }
 
     @Autowired

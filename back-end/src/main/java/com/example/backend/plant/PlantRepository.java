@@ -10,7 +10,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PlantRepository extends JpaRepository<Plant, Long> {
-    @Query(value = "SELECT * FROM plants WHERE userId = :userId", nativeQuery = true)
-    List<Plant> getPlantsByUserId(@Param("userId") int userId);
-
+    @Query("SELECT p FROM Plant p " +
+            "INNER JOIN Session s ON s.user.id = p.userId " +
+            "WHERE s.sessionUuid = :token")
+    List<Plant> getPlantsBySessionToken(@Param("token") String token);
 }
