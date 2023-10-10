@@ -58,11 +58,21 @@ public class UserService {
     @Transactional
     public LocalDateTime updateUserWatered(int userId) throws IOException {
         User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Plant not found with id: " + userId));
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
         existingUser.setLastWatered(LocalDateTime.now());
 
         userRepository.save(existingUser);
         return existingUser.getLastWatered();
+    }
+
+    @Transactional
+    public int updateUserDaysToWater(int userId, int days) throws IOException {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+        existingUser.setDaysToWater(days);
+
+        userRepository.save(existingUser);
+        return existingUser.getDaysToWater();
     }
 
 }

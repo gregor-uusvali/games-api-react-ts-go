@@ -27,6 +27,7 @@ public class Plant {
 
 
     private LocalDate date;
+    private int userId;
 
     public Plant() {
     }
@@ -35,12 +36,14 @@ public class Plant {
                  String description,
                  String image,
                  String instruction,
-                 LocalDate date) {
+                 LocalDate date,
+                 int userId) {
         this.name = name;
         this.description = description;
         this.image = image;
         this.instruction = instruction;
         this.date = date;
+        this.userId = userId;
     }
 
     public Plant(Long id,
@@ -48,13 +51,15 @@ public class Plant {
                  String description,
                  String image,
                  String instruction,
-                 LocalDate date) {
+                 LocalDate date,
+                 int userId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.image = image;
         this.instruction = instruction;
         this.date = date;
+        this.userId = userId;
     }
 
     public Long getId() {
@@ -105,6 +110,14 @@ public class Plant {
         this.date = date;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "Plant{" +
@@ -114,6 +127,7 @@ public class Plant {
                 ", image='" + image + '\'' +
                 ", instruction='" + instruction + '\'' +
                 ", date=" + date +
+                ", userId=" + userId +
                 '}';
     }
 }

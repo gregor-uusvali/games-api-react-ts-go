@@ -23,6 +23,11 @@ public class PlantService {
         return plantRepository.findAll();
     }
 
+    public List<Plant> getPlantsByUserId(int userId) {
+        return plantRepository.getPlantsByUserId(userId);
+    }
+
+
     public Plant addPlant(Plant plant) {
         System.out.println(plant);
         return plantRepository.save(plant);
@@ -43,7 +48,7 @@ public class PlantService {
         existingPlant.setName(name);
         existingPlant.setDescription(description);
         existingPlant.setInstruction(instruction);
-
+        System.out.println(existingPlant);
         plantRepository.save(existingPlant);
     }
 

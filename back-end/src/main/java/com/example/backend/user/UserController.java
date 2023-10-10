@@ -1,6 +1,7 @@
 package com.example.backend.user;
 
 import com.example.backend.plant.Plant;
+
 import com.example.backend.session.Session;
 import com.example.backend.session.SessionService;
 import jakarta.servlet.http.Cookie;
@@ -114,5 +115,11 @@ public class UserController {
     private ResponseEntity updateUserLastWatered(@PathVariable int id) throws IOException {
         LocalDateTime newWateredDate = userService.updateUserWatered(id);
         return ResponseEntity.ok(newWateredDate);
+    }
+
+    @PutMapping("/updateDaysToWater/{id}")
+    private ResponseEntity updateUserDaysToWater(@PathVariable int id, @RequestBody String days) throws IOException {
+        int newDaysToWater = userService.updateUserDaysToWater(id, Integer.parseInt(days));
+        return ResponseEntity.ok(newDaysToWater);
     }
 }

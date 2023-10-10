@@ -32,6 +32,11 @@ public class PlantController {
         return plantService.getPlants();
     }
 
+    @GetMapping(path = "/user/{id}")
+    public List<Plant> getPlantsByUserId(@PathVariable String id) {
+        return plantService.getPlantsByUserId(Integer.parseInt(id));
+    }
+
     @Autowired
     private ServletContext servletContext;
 
@@ -40,7 +45,8 @@ public class PlantController {
                                       @RequestParam("description") String description,
                                       @RequestParam("instruction") String instruction,
                                       @RequestParam("image") MultipartFile imageFile,
-                                      @RequestParam("date") LocalDate date ) {
+                                      @RequestParam("date") LocalDate date,
+                                      @RequestParam("userId") String userId) {
         if (imageFile.getSize() >= 5242880){ // over 5MB
             return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("Image to large (5MB limit)");
         }
@@ -54,6 +60,7 @@ public class PlantController {
             plant.setInstruction(instruction);
             plant.setImage("http://localhost:8080/images/" + filename);
             plant.setDate(date);
+            plant.setUserId(Integer.parseInt(userId));
 
             Plant addedPlant = plantService.addPlant(plant);
 
