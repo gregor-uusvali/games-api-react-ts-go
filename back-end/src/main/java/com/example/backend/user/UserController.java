@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -33,8 +34,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> logUserIn(@RequestBody Map<String, String> requestBody, @CookieValue(name = "session_token", required = false) String sessionTokenCookie,
-                                       HttpServletResponse response) throws IOException {
+    public ResponseEntity<?> logUserIn(@RequestBody Map<String, String> requestBody, @CookieValue(name = "session_token", required = false) String sessionTokenCookie) throws IOException {
         User user = userService.findByEmail(requestBody.get("email"));
         if (user == null) {
             // User does not exist
@@ -46,14 +46,22 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
         }
 
+        // Check if session in db with userId and delete it
+        List<Session> sessions = sessionService.getSessionsByUserId(user.getId());
+        if (sessions.size() >0){
+            for (Session session : sessions) {
+                sessionService.deleteSessionBySessionUuid(session.getSessionUuid());
+            }
+        }
+
         String sessionToken;
         if (!StringUtils.hasText(sessionTokenCookie)) {
             // Generate a new session UUID
             sessionToken = UUID.randomUUID().toString();
             Cookie sessionCookie = createCookie(user, sessionToken);
-            System.out.println("Created session cookie for user: " + user.getEmail());
+//            System.out.println("Created session cookie for user: " + user.getEmail());
             sessionService.saveSession(user, sessionToken); // Save the session with the generated UUID
-            response.addCookie(sessionCookie); // Add the session cookie to the response
+//            response.addCookie(sessionCookie); // Add the session cookie to the response
         } else {
             sessionToken = sessionTokenCookie;
             sessionService.saveSession(user, sessionToken); // Save the session with the existing UUID

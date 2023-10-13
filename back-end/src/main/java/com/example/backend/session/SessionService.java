@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class SessionService {
@@ -22,6 +23,11 @@ public class SessionService {
     public void updateSessionLastSeen(Session session) {
         session.setLastSeen(LocalDateTime.now());
         sessionRepository.save(session);
+    }
+
+    public List<Session> getSessionsByUserId(int userId){
+        List<Session> sessions = sessionRepository.findSessionsByUserId(userId);
+        return sessions;
     }
 
 //    public void saveSession(Session session) {

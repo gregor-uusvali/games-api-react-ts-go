@@ -41,4 +41,11 @@ public class Session {
     public void setSessionUuid(String sessionUuid) {
         this.sessionUuid = sessionUuid; // Add this setter
     }
+    public String getSessionUuid(){
+        return sessionUuid;
+    }
+    @Override
+    public String toString() {
+        return "Session ID: " + this.sessionUuid + ", User ID: " + this.user;
+    }
 }
