@@ -39,7 +39,7 @@ public class ImageService {
 
             // Get the absolute path to the images directory
             String uploadPath = currAbsolutePathString + "\\uploads";
-            System.out.println(uploadPath);
+//            System.out.println(uploadPath);
 
 
 //            byte[] orgImage = imageFile.getBytes();

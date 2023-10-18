@@ -10,7 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "api/v1/plants")
@@ -47,12 +49,12 @@ public class PlantController {
                                       @RequestParam("image") MultipartFile imageFile,
                                       @RequestParam("date") LocalDate date,
                                       @RequestParam("userId") String userId) {
-        if (imageFile.getSize() >= 5242880){ // over 5MB
+        if (imageFile.getSize() >= 5242880) { // over 5MB
             return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("Image to large (5MB limit)");
         }
         String filename = imageService.saveUploadedImg(imageFile);
 
-        if (filename != "Error"){
+        if (filename != "Error") {
 
             Plant plant = new Plant();
             plant.setName(name);
@@ -95,8 +97,20 @@ public class PlantController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Plant> getPlant(@PathVariable Long id) {
-        Plant plant = plantService.getPlantById(id);
-        return ResponseEntity.ok(plant);
+    public ResponseEntity<?> getPlant(@PathVariable String id) {
+        System.out.println("##############################");
+        System.out.println(id);
+        System.out.println("#################################");
+        try {
+            Plant plant = plantService.getPlantById(Long.parseLong(id));
+            return ResponseEntity.ok(plant);
+        } catch (RuntimeException e) {
+            System.out.println("ERRRRRRRRRRRRRRRRRROROR");
+            String errorMessage = "Plant not found with id: " + id;
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", errorMessage);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+
     }
 }
