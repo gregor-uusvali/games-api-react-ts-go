@@ -98,14 +98,10 @@ public class PlantController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getPlant(@PathVariable String id) {
-        System.out.println("##############################");
-        System.out.println(id);
-        System.out.println("#################################");
         try {
             Plant plant = plantService.getPlantById(Long.parseLong(id));
             return ResponseEntity.ok(plant);
         } catch (RuntimeException e) {
-            System.out.println("ERRRRRRRRRRRRRRRRRROROR");
             String errorMessage = "Plant not found with id: " + id;
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", errorMessage);

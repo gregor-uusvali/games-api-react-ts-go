@@ -51,6 +51,8 @@ public class UserService {
         user.setPassword(hashedPW);
         user.setLastWatered(LocalDateTime.now());
         user.setDaysToWater(10);
+        user.setAccessLevel(2);
+        user.setCreatedAt(LocalDateTime.now());
         return userRepository.save(user);
 
     }

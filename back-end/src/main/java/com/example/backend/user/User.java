@@ -24,6 +24,9 @@ public class User {
     private String password;
     private LocalDateTime lastWatered;
     private int daysToWater;
+    private int accessLevel;
+    private String image;
+    private LocalDateTime createdAt;
 
     public User(
             int id,
@@ -32,7 +35,10 @@ public class User {
             String firstName,
             String lastName,
             LocalDateTime lastWatered,
-            int daysToWater) {
+            int daysToWater,
+            int accessLevel,
+            String image,
+            LocalDateTime createdAt) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -40,6 +46,9 @@ public class User {
         this.lastName = lastName;
         this.lastWatered = lastWatered;
         this.daysToWater = daysToWater;
+        this.accessLevel = accessLevel;
+        this.image = image;
+        this.createdAt = createdAt;
     }
 
     public User() {
@@ -97,6 +106,19 @@ public class User {
     public void setDaysToWater(int daysToWater) {
         this.daysToWater = daysToWater;
     }
+
+    public int getAccessLevel(){ return accessLevel; }
+    public void setAccessLevel(int accessLevel) {
+        this.accessLevel = accessLevel;
+    }
+    public String getImage(){ return image; }
+    public void setImage(String image) {
+        this.image = image;
+    }
+    public LocalDateTime getCreatedAt(){ return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt){
+        this.createdAt = createdAt;
+    }
     @Override
     public String toString() {
         return "User{" +
@@ -107,6 +129,9 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", lastWatered='" + lastWatered + '\'' +
                 ", daysToWater='" + daysToWater + '\'' +
+                ", accessLevel='" + accessLevel + '\'' +
+                ", image='" + image + '\'' +
+                ", createdAt='" + createdAt + '\'' +
                 '}';
     }
 }
