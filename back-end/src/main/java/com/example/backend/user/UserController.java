@@ -1,5 +1,6 @@
 package com.example.backend.user;
 
+import com.example.backend.image.ImageService;
 import com.example.backend.plant.Plant;
 
 import com.example.backend.session.Session;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -26,11 +28,13 @@ import static com.example.backend.user.UserService.sessions;
 public class UserController {
     private final UserService userService;
 
+    private final ImageService imageService;
     private final SessionService sessionService;
 
-    public UserController(UserService userService, SessionService sessionService) {
+    public UserController(UserService userService, SessionService sessionService, ImageService imageService) {
         this.userService = userService;
         this.sessionService = sessionService;
+        this.imageService = imageService;
     }
 
     @PostMapping("/login")
@@ -130,4 +134,13 @@ public class UserController {
         int newDaysToWater = userService.updateUserDaysToWater(id, Integer.parseInt(days));
         return ResponseEntity.ok(newDaysToWater);
     }
+
+    @PutMapping("/editUserImg/{id}")
+    private void updateUserImg(@PathVariable int id, @RequestParam(value = "image") MultipartFile imageFile) throws IOException {
+        String filename = null; // Initialize the filename to null
+        filename = imageService.saveUploadedImg(imageFile);
+
+        userService.updateUserImg(id, filename);
+    }
+
 }

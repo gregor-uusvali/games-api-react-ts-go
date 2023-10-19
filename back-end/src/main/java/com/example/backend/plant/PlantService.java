@@ -1,5 +1,6 @@
 package com.example.backend.plant;
 
+import com.example.backend.image.ImageService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,11 @@ import java.util.List;
 public class PlantService {
 
     private final PlantRepository plantRepository;
+    private final ImageService imageService;
     @Autowired
-    public PlantService(PlantRepository plantRepository) {
+    public PlantService(PlantRepository plantRepository, ImageService imageService) {
         this.plantRepository = plantRepository;
+        this.imageService = imageService;
     }
 
     public List<Plant> getPlants(){
@@ -42,7 +45,7 @@ public class PlantService {
         if(image != null){
 
             String imagePath = existingPlant.getImage();
-            deletePlantImgFile(imagePath);
+            imageService.deleteImgFile(imagePath);
             existingPlant.setImage("http://localhost:8080/images/" + image);
         }
         existingPlant.setName(name);
@@ -60,7 +63,7 @@ public class PlantService {
         // Retrieve the file path of the associated image
         String imagePath = existingPlant.getImage();
 
-        deletePlantImgFile(imagePath);
+        imageService.deleteImgFile(imagePath);
 
         // Save the updated plant
         plantRepository.delete(existingPlant);
@@ -71,18 +74,18 @@ public class PlantService {
         return plant;
     }
 
-    public void deletePlantImgFile(String imagePath) throws IOException {
-        try{
-            if (imagePath != null && !imagePath.isEmpty()) {
-
-                int lastIndex = imagePath.lastIndexOf('/');
-
-                String fileName = imagePath.substring(lastIndex + 1);
-                Path fileToDeletePath = Paths.get("uploads/" + fileName);
-                Files.delete(fileToDeletePath);
-                System.out.println(fileName);
-            }
-        }catch(IOException e) {
-        }
-    }
+//    public void deletePlantImgFile(String imagePath) throws IOException {
+//        try{
+//            if (imagePath != null && !imagePath.isEmpty()) {
+//
+//                int lastIndex = imagePath.lastIndexOf('/');
+//
+//                String fileName = imagePath.substring(lastIndex + 1);
+//                Path fileToDeletePath = Paths.get("uploads/" + fileName);
+//                Files.delete(fileToDeletePath);
+//                System.out.println(fileName);
+//            }
+//        }catch(IOException e) {
+//        }
+//    }
 }

@@ -131,4 +131,19 @@ public class ImageService {
         return new BufferedImage(width, height,
                 hasAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
     }
+
+    public void deleteImgFile(String imagePath) throws IOException {
+        try{
+            if (imagePath != null && !imagePath.isEmpty()) {
+
+                int lastIndex = imagePath.lastIndexOf('/');
+
+                String fileName = imagePath.substring(lastIndex + 1);
+                Path fileToDeletePath = Paths.get("uploads/" + fileName);
+                Files.delete(fileToDeletePath);
+                System.out.println(fileName);
+            }
+        }catch(IOException e) {
+        }
+    }
 }

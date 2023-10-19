@@ -1,5 +1,6 @@
 package com.example.backend.user;
 
+import com.example.backend.image.ImageService;
 import com.example.backend.plant.Plant;
 import com.example.backend.session.Session;
 import jakarta.transaction.Transactional;
@@ -18,11 +19,13 @@ import java.util.Map;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ImageService imageService;
     public static Map<String, Session> sessions = new HashMap<>();
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, ImageService imageService) {
         this.userRepository = userRepository;
+        this.imageService = imageService;
     }
 
     // Check if an email is already taken
@@ -75,6 +78,21 @@ public class UserService {
 
         userRepository.save(existingUser);
         return existingUser.getDaysToWater();
+    }
+
+    @Transactional
+    public void updateUserImg(int id, String image) throws IOException {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        // Update the plant's attributes
+        if(image != null){
+
+            String imagePath = existingUser.getImage();
+            imageService.deleteImgFile(imagePath);
+            existingUser.setImage("http://localhost:8080/images/" + image);
+        }
+        userRepository.save(existingUser);
     }
 
 }
