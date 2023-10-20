@@ -77,6 +77,9 @@ public class UserController {
         responseBody.put("sessionToken", sessionToken);
         responseBody.put("firstName", user.getFirstName());
         responseBody.put("lastName", user.getLastName());
+        responseBody.put("accessLevel", user.getAccessLevel());
+        responseBody.put("image", user.getImage());
+        responseBody.put("createAt", user.getCreatedAt());
         return ResponseEntity.ok(responseBody);
     }
 
@@ -111,9 +114,6 @@ public class UserController {
 
     @GetMapping("/profile/0")
     private User getUserInfo(@RequestParam(name = "sessionToken") String sessionToken) {
-        // Use 'userId' to identify the user, and 'cookieParam' if needed
-        System.out.println(userService.findBySessionToken(sessionToken));
-
         return userService.findBySessionToken(sessionToken);
     }
 
@@ -143,4 +143,22 @@ public class UserController {
         userService.updateUserImg(id, filename);
     }
 
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable String id) {
+        try {
+            User user = userService.getUserById(Integer.parseInt(id));
+            int numberOfPlants = userService.getNumberOfUserPlants(Integer.parseInt(id));
+            user.setPassword("");
+            Map<String, Object> responseMap = new HashMap<>();
+            responseMap.put("user", user); // Assuming "user" is a User object
+            responseMap.put("nrOfPlants", numberOfPlants);  // An integer value
+
+            return ResponseEntity.ok(responseMap);
+        } catch (RuntimeException e) {
+            String errorMessage = "User not found with id: " + id;
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", errorMessage);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    }
 }

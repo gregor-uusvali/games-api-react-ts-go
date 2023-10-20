@@ -2,6 +2,7 @@ package com.example.backend.user;
 
 import com.example.backend.image.ImageService;
 import com.example.backend.plant.Plant;
+import com.example.backend.plant.PlantRepository;
 import com.example.backend.session.Session;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,16 @@ import java.util.Map;
 public class UserService {
 
     private final UserRepository userRepository;
+
     private final ImageService imageService;
+    private final PlantRepository plantRepository;
     public static Map<String, Session> sessions = new HashMap<>();
 
     @Autowired
-    public UserService(UserRepository userRepository, ImageService imageService) {
+    public UserService(UserRepository userRepository, ImageService imageService, PlantRepository plantRepository) {
         this.userRepository = userRepository;
         this.imageService = imageService;
+        this.plantRepository = plantRepository;
     }
 
     // Check if an email is already taken
@@ -93,6 +97,16 @@ public class UserService {
             existingUser.setImage("http://localhost:8080/images/" + image);
         }
         userRepository.save(existingUser);
+    }
+
+    public User getUserById(int id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        return user;
+    }
+
+    public int getNumberOfUserPlants(int userId) {
+        return plantRepository.getNumberOfUserPlants(userId);
     }
 
 }

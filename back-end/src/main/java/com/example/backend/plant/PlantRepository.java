@@ -14,4 +14,6 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
             "INNER JOIN Session s ON s.user.id = p.userId " +
             "WHERE s.sessionUuid = :token")
     List<Plant> getPlantsBySessionToken(@Param("token") String token);
+    @Query("SELECT COUNT(p) FROM Plant p WHERE p.userId = :userId")
+    int getNumberOfUserPlants(@Param("userId") int userId);
 }
