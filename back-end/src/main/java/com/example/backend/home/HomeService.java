@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 public class HomeService {
 
     public Payload getHomePayload() {
-        return new Payload("active", "social-network active", "1.0.0");
+        return new Payload("active", "plant-application-active", "1.0.0");
     }
 }
