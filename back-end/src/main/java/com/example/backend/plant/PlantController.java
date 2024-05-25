@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.backend.comment.Comment;
+
 @RestController
 @RequestMapping(path = "api/v1/plants")
 //@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -107,5 +109,10 @@ public class PlantController {
             errorResponse.put("error", errorMessage);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
+    }
+
+    @GetMapping("/comments/{id}")
+    public List<Comment> getPlantsComments(@PathVariable Long id) {
+        return plantService.getPlantsComments(id);
     }
 }

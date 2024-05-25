@@ -21,6 +21,7 @@ public class Comment {
     private String commentText;
     private int likeCount;
     private int dislikeCount;
+    private String date;
 
     public Comment() {
         // Default constructor for JPA

@@ -1,5 +1,6 @@
 package com.example.backend.plant;
 
+import com.example.backend.comment.CommentRepository;
 import com.example.backend.image.ImageService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +12,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import com.example.backend.comment.Comment;
+
 @Service
 public class PlantService {
 
     private final PlantRepository plantRepository;
     private final ImageService imageService;
+    private final CommentRepository commentRepository;
     @Autowired
-    public PlantService(PlantRepository plantRepository, ImageService imageService) {
+    public PlantService(PlantRepository plantRepository,
+                        ImageService imageService,
+                        CommentRepository commentRepository) {
         this.plantRepository = plantRepository;
         this.imageService = imageService;
+        this.commentRepository = commentRepository;
     }
 
     public List<Plant> getPlants(){
@@ -72,6 +79,11 @@ public class PlantService {
         Plant plant = plantRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Plant not found with id: " + id));
         return plant;
+    }
+
+    public List<Comment> getPlantsComments(Long id){
+        System.out.println(commentRepository.getCommentsByPlantId(id));
+        return commentRepository.getCommentsByPlantId(id);
     }
 
 }
