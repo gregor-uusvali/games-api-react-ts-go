@@ -1,25 +1,24 @@
 package com.example.backend.comment;
 
-import com.example.backend.plant.Plant;
-import com.example.backend.user.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+import com.example.backend.comment.CommentWithUserDTO;
 
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
-    @Query("SELECT c FROM Comment c " +
-            "INNER JOIN Plant p ON p.id = c.plantId " +
-            "INNER JOIN User u ON p.userId = u.id " +
-            "WHERE p.id = :plantId")
-    List<Comment> getCommentsByPlantId(@Param("plantId") long plantId);
+    @Query("SELECT new com.example.backend.comment.CommentWithUserDTO(c, u.email, u.firstName, u.lastName, u.image) FROM Comment c " +
+            "INNER JOIN User u ON c.userId = u.id " +
+            "WHERE c.plantId = :plantId " +
+            "ORDER BY c.date DESC")
+    List<CommentWithUserDTO> getCommentsByPlantId(@Param("plantId") long plantId);
+//    pageination part - TODO
+//    Page<CommentWithUserDTO> getCommentsByPlantId(@Param("plantId") long plantId, Pageable pageable);
 
-//    SELECT comments.*, users.first_name, users.last_name, users.image
-//    FROM comments
-//    INNER JOIN plants ON plants.id = comments.plant_id
-//    INNER JOIN users ON plants.user_id = users.id
-//    WHERE plants.id = 1;
+
 }

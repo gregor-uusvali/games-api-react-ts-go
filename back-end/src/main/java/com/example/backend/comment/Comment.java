@@ -2,6 +2,8 @@ package com.example.backend.comment;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -21,19 +23,10 @@ public class Comment {
     private String commentText;
     private int likeCount;
     private int dislikeCount;
-    private String date;
+    private LocalDateTime date;
 
     public Comment() {
         // Default constructor for JPA
-    }
-
-    public Comment(int id, int userId, long plantId, String commentText, int likeCount, int dislikeCount) {
-        this.id = id;
-        this.userId = userId;
-        this.plantId = plantId;
-        this.commentText = commentText;
-        this.likeCount = likeCount;
-        this.dislikeCount = dislikeCount;
     }
 
     // Getter and setter for id
@@ -85,6 +78,14 @@ public class Comment {
         this.dislikeCount = dislikeCount;
     }
 
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date){
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return "Comment{" +
@@ -94,6 +95,7 @@ public class Comment {
                 ", commentText='" + commentText + '\'' +
                 ", likeCount=" + likeCount +
                 ", dislikeCount=" + dislikeCount +
+                ", date=" + date +
                 '}';
     }
 }

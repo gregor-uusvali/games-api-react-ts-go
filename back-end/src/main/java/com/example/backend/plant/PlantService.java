@@ -4,6 +4,9 @@ import com.example.backend.comment.CommentRepository;
 import com.example.backend.image.ImageService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -81,9 +84,13 @@ public class PlantService {
         return plant;
     }
 
-    public List<Comment> getPlantsComments(Long id){
-        System.out.println(commentRepository.getCommentsByPlantId(id));
+    public List<?> getPlantsComments(Long id, int amount){
         return commentRepository.getCommentsByPlantId(id);
+//        pagination part - TOOD
+//        int pageSize = 10;
+//        int pageNumber = amount/pageSize -1;
+//        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+//        return commentRepository.getCommentsByPlantId(id, pageable).getContent();
     }
 
 }
