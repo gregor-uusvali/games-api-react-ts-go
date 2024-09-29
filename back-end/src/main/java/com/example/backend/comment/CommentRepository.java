@@ -1,12 +1,10 @@
 package com.example.backend.comment;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import com.example.backend.comment.CommentWithUserDTO;
+import org.w3c.dom.ls.LSOutput;
 
 import java.util.List;
 
@@ -16,7 +14,7 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
             "INNER JOIN User u ON c.userId = u.id " +
             "WHERE c.plantId = :plantId " +
             "ORDER BY c.date DESC")
-    List<CommentWithUserDTO> getCommentsByPlantId(@Param("plantId") long plantId);
+    List<CommentWithUserDTO> getCommentsByPlantId(@Param("plantId") long plantId, Pageable pageable);
 //    pageination part - TODO
 //    Page<CommentWithUserDTO> getCommentsByPlantId(@Param("plantId") long plantId, Pageable pageable);
 

@@ -114,7 +114,6 @@ public class PlantController {
     @GetMapping("/comments/{id}")
     public List<?> getPlantsComments(@PathVariable Long id, @RequestParam int amount) {
         return plantService.getPlantsComments(id, amount);
-//        pagination part - TOOD
-//        return plantService.getPlantsComments(id, amount);
+
     }
 }

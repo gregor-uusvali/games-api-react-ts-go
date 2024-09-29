@@ -29,6 +29,7 @@ public class CommentController {
         comment.setDate(LocalDateTime.now());
 
         Comment addedComment = commentService.addComment(comment);
+        System.out.println(addedComment);
         return ResponseEntity.ok(addedComment);
     }
 }

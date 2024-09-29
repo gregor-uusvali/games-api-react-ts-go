@@ -44,7 +44,6 @@ public class UserService {
     public User findBySessionToken(String token) {
         User user = userRepository.findBySessionToken(token);
         user.setPassword("");
-        user.setEmail("");
         return user;
     }
 

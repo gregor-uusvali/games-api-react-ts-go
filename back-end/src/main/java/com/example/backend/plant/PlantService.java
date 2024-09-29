@@ -6,16 +6,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-
-import com.example.backend.comment.Comment;
 
 @Service
 public class PlantService {
@@ -85,12 +79,10 @@ public class PlantService {
     }
 
     public List<?> getPlantsComments(Long id, int amount){
-        return commentRepository.getCommentsByPlantId(id);
-//        pagination part - TOOD
-//        int pageSize = 10;
-//        int pageNumber = amount/pageSize -1;
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-//        return commentRepository.getCommentsByPlantId(id, pageable).getContent();
+        int pageSize = 10;
+        int pageNumber = amount/pageSize -1;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return commentRepository.getCommentsByPlantId(id, pageable);
     }
 
 }
