@@ -32,4 +32,17 @@ public class CommentController {
         System.out.println(addedComment);
         return ResponseEntity.ok(addedComment);
     }
+
+    @PostMapping(path = "/likeComment")
+    public ResponseEntity<?> likeComment(@RequestBody CommentLikes request) {
+        System.out.println(request);
+        CommentLikes commentLikes = new CommentLikes();
+        commentLikes.setUserId(request.getUserId());
+        commentLikes.setCommentId(request.getCommentId());
+        commentLikes.setStatus(request.getStatus());
+
+        CommentLikes commentLike = commentService.commentLikes(commentLikes);
+        System.out.println(commentLike);
+        return ResponseEntity.ok(commentLike);
+    }
 }
