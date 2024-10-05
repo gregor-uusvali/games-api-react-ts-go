@@ -6,16 +6,18 @@ public class CommentWithUserDTO {
     private String firstName;
     private String lastName;
     private String image;
+    private int userStatus;
 
     // Constructor, getters, and setters
     // Constructor can take Comment and User fields
 
-    public CommentWithUserDTO(Comment comment, String email, String firstName, String lastName, String image) {
+    public CommentWithUserDTO(Comment comment, String email, String firstName, String lastName, String image, int userStatus) {
         this.comment = comment;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.image = image;
+        this.userStatus = userStatus;
     }
 
     public Comment getComment() {
@@ -56,6 +58,14 @@ public class CommentWithUserDTO {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(int userStatus) {
+        this.userStatus = userStatus;
     }
 }
 

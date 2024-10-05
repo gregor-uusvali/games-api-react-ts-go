@@ -1,6 +1,7 @@
 package com.example.backend.plant;
 
 import com.example.backend.comment.CommentRepository;
+import com.example.backend.comment.CommentService;
 import com.example.backend.image.ImageService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,16 @@ public class PlantService {
     private final PlantRepository plantRepository;
     private final ImageService imageService;
     private final CommentRepository commentRepository;
+    private final CommentService commentService;
     @Autowired
     public PlantService(PlantRepository plantRepository,
                         ImageService imageService,
-                        CommentRepository commentRepository) {
+                        CommentRepository commentRepository,
+                        CommentService commentService) {
         this.plantRepository = plantRepository;
         this.imageService = imageService;
         this.commentRepository = commentRepository;
+        this.commentService = commentService;
     }
 
     public List<Plant> getPlants(){
@@ -78,11 +82,11 @@ public class PlantService {
         return plant;
     }
 
-    public List<?> getPlantsComments(Long id, int amount){
+    public List<?> getPlantsComments(Long id, int amount, int userId){
         int pageSize = 10;
         int pageNumber = amount/pageSize -1;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return commentRepository.getCommentsByPlantId(id, pageable);
+        return commentService.getCommentsWithLikesByPlantId(id, userId, pageable);
     }
 
 }

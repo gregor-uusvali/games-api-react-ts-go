@@ -112,8 +112,8 @@ public class PlantController {
     }
 
     @GetMapping("/comments/{id}")
-    public List<?> getPlantsComments(@PathVariable Long id, @RequestParam int amount) {
-        return plantService.getPlantsComments(id, amount);
+    public List<?> getPlantsComments(@PathVariable Long id, @RequestParam int amount, @RequestHeader("userID") int userId) {
+        return plantService.getPlantsComments(id, amount, userId);
 
     }
 }
