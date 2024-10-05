@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,14 +29,28 @@ public class CommentService {
         System.out.println("############################");
         System.out.println(commentLikes);
         System.out.println("############################");
+        int userId = commentLikes.getUserId();
+        int commentId = commentLikes.getCommentId();
 
-        return commentLikesRepository.save(commentLikes);
+        // Check if a CommentLikes entry already exists
+        CommentLikes existingCommentLike = commentLikesRepository.findByUserIdAndCommentId(userId, commentId);
+
+        if (existingCommentLike != null) {
+            // If it exists, update the existing entry
+            existingCommentLike.setStatus(commentLikes.getStatus()); // Update status or any other field
+            return commentLikesRepository.save(existingCommentLike);
+        } else {
+            // If it doesn't exist, save the new entry
+            return commentLikesRepository.save(commentLikes);
+        }
     }
 
     public List<CommentWithUserDTO> getCommentsWithLikesByPlantId(long plantId, long userId, Pageable pageable) {
         // Fetch the comments
-        List<CommentWithUserDTO> comments = commentRepository.getCommentsByPlantId(plantId, userId, pageable);
-
+        List<CommentWithUserDTO> comments = commentRepository.getCommentsByPlantId(plantId, pageable);
+        System.out.println("#######################");
+        System.out.println("Userid: " + userId);
+        System.out.println("#######################");
         // For each comment, fetch like/dislike info
         for (CommentWithUserDTO comment : comments) {
             long commentId = comment.getComment().getId(); // Assuming CommentWithUserDTO has a Comment field
@@ -49,19 +64,17 @@ public class CommentService {
 
             // Process the like data
             for (Object[] row : likeData) {
-                int status = (int) row[0];
-                long count = (long) row[1];
-                userStatus = (int) row[2]; // User status (1 = like, -1 = dislike, 0 = none)
+                System.out.println(Arrays.toString(row));
+                int status = (int) row[0];  // This is the like/dislike status (1 or -1)
+                long count = (long) row[1];  // This is the like/dislike count
+                userStatus = (int) row[2];  // This is the user's like/dislike status (1, -1, or 0)
 
                 if (status == 1) {
-                    likeCount = (int) count;
-                    userStatus = 1; // User has liked the comment
+                    likeCount = (int) count;  // Set the like count
                 } else if (status == -1) {
-                    dislikeCount = (int) count;
-                    userStatus = -1; // User has disliked the comment
+                    dislikeCount = (int) count;  // Set the dislike count
                 }
             }
-
             // Set like, dislike, and user status info into the CommentWithUserDTO
             comment.getComment().setLikeCount(likeCount);
             comment.getComment().setDislikeCount(dislikeCount);

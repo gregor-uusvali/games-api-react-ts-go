@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface CommentLikesRepository extends JpaRepository<CommentLikes, Integer> {
 
+    @Query("SELECT cl FROM CommentLikes cl WHERE cl.userId = :userId AND cl.commentId = :commentId")
+    CommentLikes findByUserIdAndCommentId(@Param("userId") int userId, @Param("commentId") int commentId);
 }
