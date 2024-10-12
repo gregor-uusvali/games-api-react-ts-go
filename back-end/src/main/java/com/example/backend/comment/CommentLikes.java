@@ -11,7 +11,7 @@ public class CommentLikes {
             generator = "comment_sequence"
     )
     public int id;
-    public int status;
+    public long status;
     public int commentId;
     public int userId;
 
@@ -20,11 +20,11 @@ public class CommentLikes {
     }
 
     // Getters and setters
-    public int getStatus() {
+    public long getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(long status) {
         this.status = status;
     }
 

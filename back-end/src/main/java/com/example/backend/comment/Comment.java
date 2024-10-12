@@ -20,13 +20,20 @@ public class Comment {
     private int id;
     private int userId;
     private long plantId;
+    @Column(length = 1000)  // Increase varchar length to 1000 characters
     private String commentText;
-    private int likeCount;
-    private int dislikeCount;
     private LocalDateTime date;
 
-    public Comment() {
-        // Default constructor for JPA
+    // Default constructor for JPA
+    public Comment() {}
+
+    // Constructor that matches the HQL query
+    public Comment(int id, int userId, long plantId, String commentText, LocalDateTime date) {
+        this.id = id;
+        this.userId = userId;
+        this.plantId = plantId;
+        this.commentText = commentText;
+        this.date = date;
     }
 
     // Getter and setter for id
@@ -62,22 +69,6 @@ public class Comment {
         this.commentText = commentText;
     }
 
-    public int getLikeCount() {
-        return likeCount;
-    }
-
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
-
-    public int getDislikeCount() {
-        return dislikeCount;
-    }
-
-    public void setDislikeCount(int dislikeCount) {
-        this.dislikeCount = dislikeCount;
-    }
-
     public LocalDateTime getDate() {
         return date;
     }
@@ -93,8 +84,6 @@ public class Comment {
                 ", userId='" + userId + '\'' +
                 ", plantId='" + plantId + '\'' +
                 ", commentText='" + commentText + '\'' +
-                ", likeCount=" + likeCount +
-                ", dislikeCount=" + dislikeCount +
                 ", date=" + date +
                 '}';
     }

@@ -113,7 +113,6 @@ public class PlantController {
 
     @GetMapping("/comments/{id}")
     public List<?> getPlantsComments(@PathVariable Long id, @RequestParam int amount, @RequestHeader("userId") String userId) {
-        System.out.println("In get plants comments user id is: " + userId);
         return plantService.getPlantsComments(id, amount, Integer.parseInt(userId));
 
     }

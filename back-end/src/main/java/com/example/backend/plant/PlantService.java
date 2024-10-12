@@ -59,7 +59,6 @@ public class PlantService {
         existingPlant.setName(name);
         existingPlant.setDescription(description);
         existingPlant.setInstruction(instruction);
-        System.out.println(existingPlant);
         plantRepository.save(existingPlant);
     }
 
@@ -83,9 +82,6 @@ public class PlantService {
     }
 
     public List<?> getPlantsComments(Long id, int amount, int userId){
-        System.out.println("#######################");
-        System.out.println("Userid: " + userId);
-        System.out.println("#######################");
         int pageSize = 10;
         int pageNumber = amount/pageSize -1;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);

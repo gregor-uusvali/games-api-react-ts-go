@@ -6,18 +6,22 @@ public class CommentWithUserDTO {
     private String firstName;
     private String lastName;
     private String image;
-    private int userStatus;
+    private long likeCount;  // Updated to long
+    private long dislikeCount;  // Updated to long
+    private long userStatus;  // Updated to long
 
     // Constructor, getters, and setters
     // Constructor can take Comment and User fields
 
-    public CommentWithUserDTO(Comment comment, String email, String firstName, String lastName, String image, int userStatus) {
+    public CommentWithUserDTO(Comment comment, String email, String firstName, String lastName, String image, long likeCount, long dislikeCount, long userStatus) {
         this.comment = comment;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.image = image;
-        this.userStatus = userStatus;
+        this.likeCount = likeCount;  // maps to COALESCE(likeCount)
+        this.dislikeCount = dislikeCount;  // maps to COALESCE(dislikeCount)
+        this.userStatus = userStatus;  // maps to the last field (0 in this case)
     }
 
     public Comment getComment() {
@@ -60,12 +64,44 @@ public class CommentWithUserDTO {
         this.image = image;
     }
 
-    public int getUserStatus() {
+    public long getUserStatus() {
         return userStatus;
     }
 
     public void setUserStatus(int userStatus) {
         this.userStatus = userStatus;
+    }
+
+
+    public long getDislikeCount() {
+        return dislikeCount;
+    }
+
+    public void setDislikeCount(int dislikeCount) {
+        this.dislikeCount = dislikeCount;
+    }
+
+    public long getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+
+    @Override
+    public String toString() {
+        return "CommentWithUserDTO{" +
+                "comment=" + comment.toString() +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", image=" + image +
+                ", likeCount=" + likeCount +
+                ", dislikeCount=" + dislikeCount +
+                ", userStatus=" + userStatus +
+                '}';
     }
 }
 

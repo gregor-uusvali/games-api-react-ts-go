@@ -1,12 +1,10 @@
 package com.example.backend.user;
 
 import com.example.backend.image.ImageService;
-import com.example.backend.plant.Plant;
 
 import com.example.backend.session.Session;
 import com.example.backend.session.SessionService;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
