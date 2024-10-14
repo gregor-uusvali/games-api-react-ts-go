@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
            "INNER JOIN Session s ON s.user.id = u.id " +
            "WHERE s.sessionUuid = :token")
     User findBySessionToken(@Param("token") String token);
+
+
 }

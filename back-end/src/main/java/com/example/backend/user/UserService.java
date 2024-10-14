@@ -108,4 +108,13 @@ public class UserService {
         return plantRepository.getNumberOfUserPlants(userId);
     }
 
+
+    public User updateUsername(int id, String firstName, String lastName) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        existingUser.setFirstName(firstName);
+        existingUser.setLastName(lastName);
+        return userRepository.save(existingUser);
+    }
 }

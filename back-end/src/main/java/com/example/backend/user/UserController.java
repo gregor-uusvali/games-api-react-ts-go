@@ -141,6 +141,11 @@ public class UserController {
         userService.updateUserImg(id, filename);
     }
 
+    @PutMapping("/editUserName/{id}")
+    private User updateUsername(@PathVariable int id, @RequestBody Map<String, String> formData) {
+        return userService.updateUsername(id, formData.get("firstName"), formData.get("lastName"));
+    }
+
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getUserById(@PathVariable String id) {
         try {
