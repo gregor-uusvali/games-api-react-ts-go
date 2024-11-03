@@ -38,6 +38,9 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 	// If you're using Java 8 date/time types (java.time.*)
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0'
+
+	// DateUtil
+	implementation 'org.apache.commons:commons-lang3:3.0'
 }
 
 tasks.named('test') {
