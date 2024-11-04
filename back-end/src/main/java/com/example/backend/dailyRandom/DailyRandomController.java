@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 @RestController
 @RequestMapping(path = "api/v1/dailyRandom")
 public class DailyRandomController {
@@ -17,7 +20,10 @@ public class DailyRandomController {
     }
 
     @GetMapping
-    public int getDailyRandomNumber() {
-        return dailyRandomService.getDailyRandomNumber();
+    public String getDailyRandomNumber() throws URISyntaxException, IOException, InterruptedException {
+        int rn = dailyRandomService.getDailyRandomNumber();
+        String rp = dailyRandomService.getDailyRandomPlant(rn);
+        return rp;
+
     }
 }
