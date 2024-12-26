@@ -1,7 +1,11 @@
 package com.example.backend.dailyRandom;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.coyote.Response;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +17,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -56,14 +61,33 @@ public class DailyRandomService {
     }
 
     public String getDailyRandomPlant(int rn) throws URISyntaxException, IOException, InterruptedException {
-        String trefoilApiKey = environment.getProperty("treffleApiKey");
+        String treffleApiKey = environment.getProperty("treffleApiKey");
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI("https://trefle.io/api/v1/plants/" + rn + "?token=" + trefoilApiKey))
+                .uri(new URI("https://trefle.io/api/v1/plants/" + rn + "?token=" + treffleApiKey))
                 .GET()
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        //scraper();
+        // Create ObjectMapper instance
+        ObjectMapper mapper = new ObjectMapper();
+        // Parse JSON string to JsonNode
+        JsonNode rootNode = mapper.readTree(response.body());
+
+        // Get scientific_name from the data object
+        String scientificName = rootNode.get("data").get("scientific_name").asText().split("-")[0];
+        scraper(scientificName);
         return response.body();
+    }
+
+    private void scraper(String word) {
+        Document doc = null;
+        try {
+            doc = Jsoup.connect("https://www.google.com/search?q=" + word).get();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        doc.select("img").forEach(System.out::println);
     }
 }

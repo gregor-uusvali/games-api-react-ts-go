@@ -41,8 +41,15 @@ dependencies {
 
 	// DateUtil
 	implementation 'org.apache.commons:commons-lang3:3.0'
+
+	// Jsoup
+	implementation 'org.jsoup:jsoup:1.18.3'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+bootRun {
+	sourceResources sourceSets.main
 }

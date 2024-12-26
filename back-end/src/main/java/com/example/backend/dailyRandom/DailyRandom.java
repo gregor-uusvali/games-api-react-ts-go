@@ -28,4 +28,12 @@ public class DailyRandom {
         this.today = today;
     }
 
+    @Override
+    public String toString() {
+        return "DailyRandom{" +
+                "id=" + id +
+                ", number='" + number + '\'' +
+                ", today='" + today + '\'' +
+                '}';
+    }
 }
